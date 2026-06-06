@@ -1,0 +1,25 @@
+{
+  "validacion_mes": 202601,
+  "churn_rate_valid": 0.0087,
+  "modelos": [
+    {
+      "modelo": "LogReg (baseline)",
+      "pr_auc": 0.212,
+      "roc_auc": 0.9476
+    },
+    {
+      "modelo": "HistGradientBoosting",
+      "pr_auc": 0.3273,
+      "roc_auc": 0.9549
+    }
+  ],
+  "umbral_elegido": 0.8,
+  "matriz_confusion": {
+    "tp": 1272,
+    "fp": 7216,
+    "fn": 454,
+    "tn": 188652
+  },
+  "recall_top10pct": 0.871,
+  "azar_pr_auc": 0.0087
+}

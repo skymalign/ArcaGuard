@@ -1,0 +1,1405 @@
+{
+  "kpis": {
+    "clientes_evaluados": 199923,
+    "churn_rate_pct": 0.81,
+    "clientes_riesgo_alto": 10276,
+    "pr_auc": 0.3273,
+    "roc_auc": 0.9549,
+    "recall_top10pct": 0.871,
+    "mxn_perdidos_mes": 12000000,
+    "mxn_direccionable_top10": 10452000
+  },
+  "modelos": [
+    {
+      "modelo": "LogReg (baseline)",
+      "pr_auc": 0.212,
+      "roc_auc": 0.9476
+    },
+    {
+      "modelo": "HistGradientBoosting",
+      "pr_auc": 0.3273,
+      "roc_auc": 0.9549
+    },
+    {
+      "modelo": "Azar (churn rate)",
+      "pr_auc": 0.0087,
+      "roc_auc": 0.5
+    }
+  ],
+  "importancia_variables": [
+    {
+      "variable": "tx_lag1",
+      "importance": 0.1311,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "bx_lag1",
+      "importance": 0.0992,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "tx_mean_12",
+      "importance": 0.0618,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "tx_ratio_1_3",
+      "importance": 0.0496,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "recency",
+      "importance": 0.0453,
+      "categoria": "Actividad"
+    },
+    {
+      "variable": "territory_d",
+      "importance": 0.0317,
+      "categoria": "Cliente"
+    },
+    {
+      "variable": "num_coolers_last",
+      "importance": 0.0215,
+      "categoria": "Coolers"
+    },
+    {
+      "variable": "bx_mean_3",
+      "importance": 0.0187,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "rtm_customer_size_d",
+      "importance": 0.017,
+      "categoria": "Cliente"
+    },
+    {
+      "variable": "tenure",
+      "importance": 0.0167,
+      "categoria": "Actividad"
+    },
+    {
+      "variable": "tx_lag3",
+      "importance": 0.0159,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "bx_lag2",
+      "importance": 0.0076,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "tx_slope_3",
+      "importance": 0.0075,
+      "categoria": "Ventas"
+    },
+    {
+      "variable": "comercial_subchannel_d",
+      "importance": 0.0049,
+      "categoria": "Cliente"
+    },
+    {
+      "variable": "meses_activos_6",
+      "importance": 0.0039,
+      "categoria": "Actividad"
+    }
+  ],
+  "recall_topk": [
+    {
+      "top_%": "1%",
+      "clientes_contactados": 1975,
+      "churners_capturados": 720,
+      "recall": 0.417,
+      "lift": 41.73
+    },
+    {
+      "top_%": "2%",
+      "clientes_contactados": 3951,
+      "churners_capturados": 1002,
+      "recall": 0.581,
+      "lift": 29.03
+    },
+    {
+      "top_%": "5%",
+      "clientes_contactados": 9879,
+      "churners_capturados": 1327,
+      "recall": 0.769,
+      "lift": 15.38
+    },
+    {
+      "top_%": "10%",
+      "clientes_contactados": 19759,
+      "churners_capturados": 1503,
+      "recall": 0.871,
+      "lift": 8.71
+    },
+    {
+      "top_%": "20%",
+      "clientes_contactados": 39518,
+      "churners_capturados": 1618,
+      "recall": 0.937,
+      "lift": 4.69
+    }
+  ],
+  "umbral": [
+    {
+      "umbral": 0.2,
+      "precision": 0.043,
+      "recall": 0.93,
+      "f1": 0.082,
+      "marcados": 37250
+    },
+    {
+      "umbral": 0.3,
+      "precision": 0.054,
+      "recall": 0.907,
+      "f1": 0.102,
+      "marcados": 28846
+    },
+    {
+      "umbral": 0.4,
+      "precision": 0.066,
+      "recall": 0.891,
+      "f1": 0.123,
+      "marcados": 23244
+    },
+    {
+      "umbral": 0.5,
+      "precision": 0.079,
+      "recall": 0.865,
+      "f1": 0.144,
+      "marcados": 18976
+    },
+    {
+      "umbral": 0.6,
+      "precision": 0.095,
+      "recall": 0.838,
+      "f1": 0.17,
+      "marcados": 15309
+    },
+    {
+      "umbral": 0.7,
+      "precision": 0.117,
+      "recall": 0.8,
+      "f1": 0.204,
+      "marcados": 11816
+    },
+    {
+      "umbral": 0.8,
+      "precision": 0.15,
+      "recall": 0.737,
+      "f1": 0.249,
+      "marcados": 8488
+    }
+  ],
+  "churn_por_territorio": [
+    {
+      "territorio": "Monclova",
+      "churn_pct": 1.35,
+      "registros": 54010
+    },
+    {
+      "territorio": "Reynosa",
+      "churn_pct": 1.33,
+      "registros": 136345
+    },
+    {
+      "territorio": "Laredo",
+      "churn_pct": 1.13,
+      "registros": 39618
+    },
+    {
+      "territorio": "Matamoros",
+      "churn_pct": 1.1,
+      "registros": 96247
+    },
+    {
+      "territorio": "Saltillo",
+      "churn_pct": 1.04,
+      "registros": 135360
+    },
+    {
+      "territorio": "Comarca Lagunera",
+      "churn_pct": 1.02,
+      "registros": 240225
+    },
+    {
+      "territorio": "Piedras negras",
+      "churn_pct": 0.97,
+      "registros": 76215
+    },
+    {
+      "territorio": "Monterrey",
+      "churn_pct": 0.95,
+      "registros": 468284
+    },
+    {
+      "territorio": "Culiacan",
+      "churn_pct": 0.91,
+      "registros": 219340
+    },
+    {
+      "territorio": "San Luis Potosi",
+      "churn_pct": 0.88,
+      "registros": 284634
+    },
+    {
+      "territorio": "Hermosillo",
+      "churn_pct": 0.86,
+      "registros": 108606
+    },
+    {
+      "territorio": "La Paz",
+      "churn_pct": 0.85,
+      "registros": 89193
+    },
+    {
+      "territorio": "Juarez",
+      "churn_pct": 0.83,
+      "registros": 155728
+    },
+    {
+      "territorio": "Guadalajara",
+      "churn_pct": 0.81,
+      "registros": 555005
+    },
+    {
+      "territorio": "Nuevo Leon",
+      "churn_pct": 0.77,
+      "registros": 62102
+    },
+    {
+      "territorio": "Zacatecas",
+      "churn_pct": 0.75,
+      "registros": 276598
+    },
+    {
+      "territorio": "Aguascalientes",
+      "churn_pct": 0.74,
+      "registros": 291590
+    },
+    {
+      "territorio": "Obregon",
+      "churn_pct": 0.73,
+      "registros": 123839
+    },
+    {
+      "territorio": "Mexicali",
+      "churn_pct": 0.69,
+      "registros": 113827
+    },
+    {
+      "territorio": "Mazatlan",
+      "churn_pct": 0.57,
+      "registros": 127184
+    },
+    {
+      "territorio": "Mesa Central",
+      "churn_pct": 0.57,
+      "registros": 149617
+    },
+    {
+      "territorio": "Chihuahua",
+      "churn_pct": 0.56,
+      "registros": 72243
+    },
+    {
+      "territorio": "Jalisco",
+      "churn_pct": 0.54,
+      "registros": 409909
+    },
+    {
+      "territorio": "Delicias",
+      "churn_pct": 0.53,
+      "registros": 97467
+    },
+    {
+      "territorio": "Durango",
+      "churn_pct": 0.26,
+      "registros": 165177
+    }
+  ],
+  "churn_por_coolers": [
+    {
+      "coolers": "0",
+      "churn_pct": 2.35,
+      "registros": 530138
+    },
+    {
+      "coolers": "1",
+      "churn_pct": 0.768,
+      "registros": 2631873
+    },
+    {
+      "coolers": "2-3",
+      "churn_pct": 0.313,
+      "registros": 1195112
+    },
+    {
+      "coolers": "4+",
+      "churn_pct": 0.118,
+      "registros": 191240
+    }
+  ],
+  "churn_por_tamano": [
+    {
+      "tamano": "Mini",
+      "churn_pct": 3.268,
+      "registros": 792608
+    },
+    {
+      "tamano": "Mediano",
+      "churn_pct": 0.18,
+      "registros": 1668232
+    },
+    {
+      "tamano": "Grande",
+      "churn_pct": 0.045,
+      "registros": 530024
+    },
+    {
+      "tamano": "Gigante",
+      "churn_pct": 0.029,
+      "registros": 342994
+    },
+    {
+      "tamano": "PequeÃ±o",
+      "churn_pct": 0.609,
+      "registros": 1214505
+    }
+  ],
+  "churn_por_subcanal": [
+    {
+      "subcanal": "Hogares",
+      "churn_pct": 1.424,
+      "registros": 1138098
+    },
+    {
+      "subcanal": "Tienda orgÃ¡nica",
+      "churn_pct": 0.908,
+      "registros": 69238
+    },
+    {
+      "subcanal": "VerdulerÃ­a",
+      "churn_pct": 0.87,
+      "registros": 160180
+    },
+    {
+      "subcanal": "Farmacia",
+      "churn_pct": 0.858,
+      "registros": 89866
+    },
+    {
+      "subcanal": "TortillerÃ­a",
+      "churn_pct": 0.825,
+      "registros": 78280
+    },
+    {
+      "subcanal": "PanaderÃ­a",
+      "churn_pct": 0.805,
+      "registros": 35262
+    },
+    {
+      "subcanal": "Tiendas de carne/pollo/pescado",
+      "churn_pct": 0.735,
+      "registros": 92494
+    },
+    {
+      "subcanal": "LicorerÃ­a",
+      "churn_pct": 0.644,
+      "registros": 457243
+    },
+    {
+      "subcanal": "Abarrotes y bodegas",
+      "churn_pct": 0.557,
+      "registros": 1189317
+    },
+    {
+      "subcanal": "Kiosco",
+      "churn_pct": 0.541,
+      "registros": 1110184
+    },
+    {
+      "subcanal": "Mayorista",
+      "churn_pct": 0.406,
+      "registros": 37174
+    },
+    {
+      "subcanal": "Proximidad",
+      "churn_pct": 0.359,
+      "registros": 13075
+    },
+    {
+      "subcanal": "Minisuper",
+      "churn_pct": 0.33,
+      "registros": 77952
+    }
+  ],
+  "churn_por_mes": [
+    {
+      "mes": "202403",
+      "churn_pct": 0.695,
+      "registros": 195946
+    },
+    {
+      "mes": "202404",
+      "churn_pct": 0.636,
+      "registros": 196895
+    },
+    {
+      "mes": "202405",
+      "churn_pct": 0.773,
+      "registros": 197759
+    },
+    {
+      "mes": "202406",
+      "churn_pct": 0.825,
+      "registros": 198284
+    },
+    {
+      "mes": "202407",
+      "churn_pct": 0.81,
+      "registros": 198563
+    },
+    {
+      "mes": "202408",
+      "churn_pct": 0.862,
+      "registros": 198714
+    },
+    {
+      "mes": "202409",
+      "churn_pct": 0.871,
+      "registros": 198695
+    },
+    {
+      "mes": "202410",
+      "churn_pct": 0.81,
+      "registros": 198713
+    },
+    {
+      "mes": "202411",
+      "churn_pct": 0.939,
+      "registros": 198544
+    },
+    {
+      "mes": "202412",
+      "churn_pct": 0.88,
+      "registros": 198196
+    },
+    {
+      "mes": "202501",
+      "churn_pct": 0.984,
+      "registros": 197722
+    },
+    {
+      "mes": "202502",
+      "churn_pct": 0.955,
+      "registros": 196848
+    },
+    {
+      "mes": "202503",
+      "churn_pct": 0.748,
+      "registros": 196332
+    },
+    {
+      "mes": "202504",
+      "churn_pct": 0.699,
+      "registros": 196381
+    },
+    {
+      "mes": "202505",
+      "churn_pct": 0.626,
+      "registros": 196949
+    },
+    {
+      "mes": "202506",
+      "churn_pct": 0.705,
+      "registros": 197470
+    },
+    {
+      "mes": "202507",
+      "churn_pct": 0.705,
+      "registros": 197724
+    },
+    {
+      "mes": "202508",
+      "churn_pct": 0.753,
+      "registros": 198038
+    },
+    {
+      "mes": "202509",
+      "churn_pct": 0.728,
+      "registros": 198250
+    },
+    {
+      "mes": "202510",
+      "churn_pct": 0.835,
+      "registros": 198424
+    },
+    {
+      "mes": "202511",
+      "churn_pct": 0.964,
+      "registros": 198337
+    },
+    {
+      "mes": "202512",
+      "churn_pct": 0.848,
+      "registros": 197985
+    },
+    {
+      "mes": "202601",
+      "churn_pct": 0.874,
+      "registros": 197594
+    }
+  ],
+  "pr_curve": [
+    {
+      "recall": 1.0,
+      "precision": 0.0087
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0088
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0088
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0089
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0089
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.009
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.009
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0091
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0091
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0092
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0092
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0093
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0093
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0094
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0094
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0095
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0095
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0096
+    },
+    {
+      "recall": 1.0,
+      "precision": 0.0096
+    },
+    {
+      "recall": 0.9994,
+      "precision": 0.0097
+    },
+    {
+      "recall": 0.9994,
+      "precision": 0.0097
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0098
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0098
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0099
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.01
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.01
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0101
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0101
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0102
+    },
+    {
+      "recall": 0.9988,
+      "precision": 0.0102
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0103
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0104
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0104
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0105
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0106
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0106
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0107
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0107
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0108
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0109
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.011
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.011
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0111
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0112
+    },
+    {
+      "recall": 0.9983,
+      "precision": 0.0112
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0113
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0114
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0114
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0115
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0116
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0117
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0118
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0118
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0119
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.012
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0121
+    },
+    {
+      "recall": 0.9977,
+      "precision": 0.0122
+    },
+    {
+      "recall": 0.9971,
+      "precision": 0.0122
+    },
+    {
+      "recall": 0.9971,
+      "precision": 0.0123
+    },
+    {
+      "recall": 0.9971,
+      "precision": 0.0124
+    },
+    {
+      "recall": 0.9971,
+      "precision": 0.0125
+    },
+    {
+      "recall": 0.9965,
+      "precision": 0.0126
+    },
+    {
+      "recall": 0.9965,
+      "precision": 0.0127
+    },
+    {
+      "recall": 0.9965,
+      "precision": 0.0128
+    },
+    {
+      "recall": 0.9965,
+      "precision": 0.0129
+    },
+    {
+      "recall": 0.9965,
+      "precision": 0.013
+    },
+    {
+      "recall": 0.9965,
+      "precision": 0.0131
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0132
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0133
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0134
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0135
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0136
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0137
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0138
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.0139
+    },
+    {
+      "recall": 0.9959,
+      "precision": 0.014
+    },
+    {
+      "recall": 0.9954,
+      "precision": 0.0141
+    },
+    {
+      "recall": 0.9954,
+      "precision": 0.0142
+    },
+    {
+      "recall": 0.9954,
+      "precision": 0.0144
+    },
+    {
+      "recall": 0.9954,
+      "precision": 0.0145
+    },
+    {
+      "recall": 0.9948,
+      "precision": 0.0146
+    },
+    {
+      "recall": 0.9936,
+      "precision": 0.0147
+    },
+    {
+      "recall": 0.9936,
+      "precision": 0.0148
+    },
+    {
+      "recall": 0.9936,
+      "precision": 0.0149
+    },
+    {
+      "recall": 0.9936,
+      "precision": 0.0151
+    },
+    {
+      "recall": 0.993,
+      "precision": 0.0152
+    },
+    {
+      "recall": 0.993,
+      "precision": 0.0153
+    },
+    {
+      "recall": 0.993,
+      "precision": 0.0155
+    },
+    {
+      "recall": 0.993,
+      "precision": 0.0156
+    },
+    {
+      "recall": 0.993,
+      "precision": 0.0157
+    },
+    {
+      "recall": 0.9925,
+      "precision": 0.0159
+    },
+    {
+      "recall": 0.9925,
+      "precision": 0.016
+    },
+    {
+      "recall": 0.9925,
+      "precision": 0.0162
+    },
+    {
+      "recall": 0.9925,
+      "precision": 0.0163
+    },
+    {
+      "recall": 0.9925,
+      "precision": 0.0165
+    },
+    {
+      "recall": 0.9925,
+      "precision": 0.0166
+    },
+    {
+      "recall": 0.9919,
+      "precision": 0.0168
+    },
+    {
+      "recall": 0.9919,
+      "precision": 0.017
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.0171
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.0173
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.0175
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.0176
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.0178
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.018
+    },
+    {
+      "recall": 0.9913,
+      "precision": 0.0182
+    },
+    {
+      "recall": 0.9907,
+      "precision": 0.0184
+    },
+    {
+      "recall": 0.9896,
+      "precision": 0.0186
+    },
+    {
+      "recall": 0.989,
+      "precision": 0.0188
+    },
+    {
+      "recall": 0.989,
+      "precision": 0.019
+    },
+    {
+      "recall": 0.989,
+      "precision": 0.0192
+    },
+    {
+      "recall": 0.9884,
+      "precision": 0.0194
+    },
+    {
+      "recall": 0.9878,
+      "precision": 0.0196
+    },
+    {
+      "recall": 0.9873,
+      "precision": 0.0198
+    },
+    {
+      "recall": 0.9867,
+      "precision": 0.02
+    },
+    {
+      "recall": 0.9861,
+      "precision": 0.0202
+    },
+    {
+      "recall": 0.9849,
+      "precision": 0.0205
+    },
+    {
+      "recall": 0.9849,
+      "precision": 0.0207
+    },
+    {
+      "recall": 0.9826,
+      "precision": 0.0209
+    },
+    {
+      "recall": 0.9826,
+      "precision": 0.0212
+    },
+    {
+      "recall": 0.9826,
+      "precision": 0.0214
+    },
+    {
+      "recall": 0.9815,
+      "precision": 0.0217
+    },
+    {
+      "recall": 0.9809,
+      "precision": 0.0219
+    },
+    {
+      "recall": 0.9803,
+      "precision": 0.0222
+    },
+    {
+      "recall": 0.9791,
+      "precision": 0.0225
+    },
+    {
+      "recall": 0.978,
+      "precision": 0.0227
+    },
+    {
+      "recall": 0.9768,
+      "precision": 0.023
+    },
+    {
+      "recall": 0.9768,
+      "precision": 0.0233
+    },
+    {
+      "recall": 0.9762,
+      "precision": 0.0237
+    },
+    {
+      "recall": 0.9757,
+      "precision": 0.024
+    },
+    {
+      "recall": 0.9757,
+      "precision": 0.0243
+    },
+    {
+      "recall": 0.9745,
+      "precision": 0.0246
+    },
+    {
+      "recall": 0.9739,
+      "precision": 0.025
+    },
+    {
+      "recall": 0.9739,
+      "precision": 0.0254
+    },
+    {
+      "recall": 0.9733,
+      "precision": 0.0257
+    },
+    {
+      "recall": 0.9728,
+      "precision": 0.0261
+    },
+    {
+      "recall": 0.9722,
+      "precision": 0.0265
+    },
+    {
+      "recall": 0.9722,
+      "precision": 0.0269
+    },
+    {
+      "recall": 0.9716,
+      "precision": 0.0273
+    },
+    {
+      "recall": 0.9705,
+      "precision": 0.0278
+    },
+    {
+      "recall": 0.9687,
+      "precision": 0.0282
+    },
+    {
+      "recall": 0.9676,
+      "precision": 0.0286
+    },
+    {
+      "recall": 0.9658,
+      "precision": 0.029
+    },
+    {
+      "recall": 0.9652,
+      "precision": 0.0295
+    },
+    {
+      "recall": 0.9641,
+      "precision": 0.03
+    },
+    {
+      "recall": 0.9623,
+      "precision": 0.0305
+    },
+    {
+      "recall": 0.9612,
+      "precision": 0.031
+    },
+    {
+      "recall": 0.9594,
+      "precision": 0.0316
+    },
+    {
+      "recall": 0.9589,
+      "precision": 0.0322
+    },
+    {
+      "recall": 0.9571,
+      "precision": 0.0327
+    },
+    {
+      "recall": 0.9554,
+      "precision": 0.0333
+    },
+    {
+      "recall": 0.9542,
+      "precision": 0.034
+    },
+    {
+      "recall": 0.9537,
+      "precision": 0.0347
+    },
+    {
+      "recall": 0.9519,
+      "precision": 0.0353
+    },
+    {
+      "recall": 0.9502,
+      "precision": 0.036
+    },
+    {
+      "recall": 0.9479,
+      "precision": 0.0367
+    },
+    {
+      "recall": 0.9473,
+      "precision": 0.0375
+    },
+    {
+      "recall": 0.9461,
+      "precision": 0.0384
+    },
+    {
+      "recall": 0.9438,
+      "precision": 0.0392
+    },
+    {
+      "recall": 0.9403,
+      "precision": 0.04
+    },
+    {
+      "recall": 0.9374,
+      "precision": 0.0409
+    },
+    {
+      "recall": 0.9351,
+      "precision": 0.0418
+    },
+    {
+      "recall": 0.9322,
+      "precision": 0.0428
+    },
+    {
+      "recall": 0.9282,
+      "precision": 0.0437
+    },
+    {
+      "recall": 0.9241,
+      "precision": 0.0448
+    },
+    {
+      "recall": 0.9206,
+      "precision": 0.0459
+    },
+    {
+      "recall": 0.9189,
+      "precision": 0.0471
+    },
+    {
+      "recall": 0.916,
+      "precision": 0.0484
+    },
+    {
+      "recall": 0.9137,
+      "precision": 0.0498
+    },
+    {
+      "recall": 0.9096,
+      "precision": 0.0512
+    },
+    {
+      "recall": 0.9073,
+      "precision": 0.0527
+    },
+    {
+      "recall": 0.9073,
+      "precision": 0.0546
+    },
+    {
+      "recall": 0.9061,
+      "precision": 0.0564
+    },
+    {
+      "recall": 0.9038,
+      "precision": 0.0584
+    },
+    {
+      "recall": 0.8992,
+      "precision": 0.0603
+    },
+    {
+      "recall": 0.8963,
+      "precision": 0.0625
+    },
+    {
+      "recall": 0.8934,
+      "precision": 0.0649
+    },
+    {
+      "recall": 0.8882,
+      "precision": 0.0673
+    },
+    {
+      "recall": 0.8835,
+      "precision": 0.07
+    },
+    {
+      "recall": 0.8783,
+      "precision": 0.0729
+    },
+    {
+      "recall": 0.8708,
+      "precision": 0.0759
+    },
+    {
+      "recall": 0.8644,
+      "precision": 0.0793
+    },
+    {
+      "recall": 0.8598,
+      "precision": 0.0833
+    },
+    {
+      "recall": 0.8499,
+      "precision": 0.0872
+    },
+    {
+      "recall": 0.8418,
+      "precision": 0.0917
+    },
+    {
+      "recall": 0.832,
+      "precision": 0.0967
+    },
+    {
+      "recall": 0.821,
+      "precision": 0.1022
+    },
+    {
+      "recall": 0.8123,
+      "precision": 0.1089
+    },
+    {
+      "recall": 0.8007,
+      "precision": 0.1163
+    },
+    {
+      "recall": 0.7856,
+      "precision": 0.1244
+    },
+    {
+      "recall": 0.7688,
+      "precision": 0.1339
+    },
+    {
+      "recall": 0.7486,
+      "precision": 0.1449
+    },
+    {
+      "recall": 0.7213,
+      "precision": 0.157
+    },
+    {
+      "recall": 0.6935,
+      "precision": 0.1725
+    },
+    {
+      "recall": 0.6645,
+      "precision": 0.1928
+    },
+    {
+      "recall": 0.6356,
+      "precision": 0.2212
+    },
+    {
+      "recall": 0.5823,
+      "precision": 0.2531
+    },
+    {
+      "recall": 0.5168,
+      "precision": 0.2991
+    },
+    {
+      "recall": 0.4195,
+      "precision": 0.3635
+    },
+    {
+      "recall": 0.2683,
+      "precision": 0.463
+    },
+    {
+      "recall": 0.0,
+      "precision": 1.0
+    }
+  ],
+  "niveles_riesgo": [
+    {
+      "nivel": "bajo",
+      "clientes": 169286
+    },
+    {
+      "nivel": "medio",
+      "clientes": 20361
+    },
+    {
+      "nivel": "alto",
+      "clientes": 10276
+    }
+  ],
+  "preguntas": [
+    {
+      "id": "P1",
+      "pregunta": "¿Qué variables influyen más en que un cliente deje de comprar?",
+      "respuesta": "El nivel y la tendencia de compra reciente, no los datos demográficos.",
+      "dato_clave": "Top variables: tx_lag1, bx_lag1, tx_mean_12",
+      "recomendacion": "Alerta temprana cuando un cliente cae por debajo de su propia media histórica.",
+      "grafica": "importancia_variables"
+    },
+    {
+      "id": "P2",
+      "pregunta": "¿El territorio influye en la pérdida de clientes?",
+      "respuesta": "Sí: el churn varía ~5.2× entre territorios.",
+      "dato_clave": "Monclova 1.35% (mayor) vs Durango 0.26% (menor)",
+      "recomendacion": "Reforzar retención en los territorios de mayor churn; replicar buenas prácticas de los de menor.",
+      "grafica": "churn_por_territorio"
+    },
+    {
+      "id": "P3",
+      "pregunta": "¿La cantidad de coolers afecta el riesgo de churn?",
+      "respuesta": "Sí, relación monótona de ~20×.",
+      "dato_clave": "0 coolers 2.35% vs 4+ coolers 0.12% de churn",
+      "recomendacion": "Instalar coolers a clientes de alto riesgo que aún no tienen → palanca directa de retención.",
+      "grafica": "churn_por_coolers"
+    },
+    {
+      "id": "extra",
+      "pregunta": "¿El tamaño del cliente importa?",
+      "respuesta": "Sí: los clientes pequeños ('Mini') son los más volátiles.",
+      "dato_clave": "Mini 3.27% vs Gigante 0.03% de churn",
+      "recomendacion": "Enfocar campañas de retención en clientes Mini/Pequeño.",
+      "grafica": "churn_por_tamano"
+    }
+  ],
+  "mensaje_principal": "Contactando solo al 10% de clientes más riesgosos, el equipo comercial alcanza al 87% de quienes van a abandonar."
+}
