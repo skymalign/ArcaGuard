@@ -190,11 +190,13 @@ def main():
     print(f"Clientes marcados churn (target=1): {pred_out['target'].sum():,}")
 
     # ---------- 8. GUARDADO ----------
-    # submission con el formato exacto de preds_submission.csv (target, customer_id)
+    # submission con el formato exacto de preds_submission.csv (target, customer_id).
+    # IMPORTANTE: la columna target debe ser la PROBABILIDAD de churn (se califica con AUC),
+    # NO la etiqueta 0/1. El AUC necesita el score continuo para ordenar a los clientes.
     sub_tmpl = pd.read_csv("data/raw/preds_submission.csv", dtype={"customer_id": "string"})
     sub = sub_tmpl[["customer_id"]].merge(
-        pred_out[["customer_id", "target"]], on="customer_id", how="left")
-    sub["target"] = sub["target"].fillna(0).astype(int)
+        pred_out[["customer_id", "churn_proba"]], on="customer_id", how="left")
+    sub["target"] = sub["churn_proba"].fillna(0.0)
     sub[["target", "customer_id"]].to_csv(PROC / "preds_submission.csv", index=False)
 
     pred_out.sort_values("churn_proba", ascending=False).to_csv(
