@@ -21,7 +21,7 @@ const TITLES: Record<string, { title: string }> = {
 
 export default function App() {
   const [activeNav, setActiveNav] = useState('dashboard');
-  const { title, subtitle } = TITLES[activeNav] ?? TITLES.dashboard;
+  const { title} = TITLES[activeNav] ?? TITLES.dashboard;
   const [selectedClienteId, setSelectedClienteId] = useState<string | undefined>(); // To show AI recs
 
   const openPlanIA = (clienteId: string) => {
@@ -33,7 +33,7 @@ export default function App() {
     <div className="flex h-screen overflow-hidden font-sans bg-gray-50">
       <Sidebar active={activeNav} onSelect={setActiveNav} />
       <div className="flex-1 flex flex-col min-w-0">
-        {!FULLSCREEN.includes(activeNav) && <Topbar title={title} subtitle={subtitle} />}
+        {!FULLSCREEN.includes(activeNav) && <Topbar title={title}/>}
         {activeNav === 'dashboard' && <DashboardPage />}
         {activeNav === 'clientes' && (
           <ClientesPage onPlanIA={openPlanIA} />
