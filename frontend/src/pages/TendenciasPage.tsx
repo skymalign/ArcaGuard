@@ -16,7 +16,7 @@ const ACCIONES = ['Visita urgente programada', 'Llamada agendada para hoy', 'Pro
 const LISTA_PRIORIZADA = [...CLIENTES]
   .sort((a, b) => b.score - a.score)
   .slice(0, 5)
-  .map((c, i) => ({ rank: i + 1, cliente: c.nombre, score: c.score, territorio: c.territorio, accion: ACCIONES[i] ?? 'Seguimiento programado' }));
+  .map((c, i) => ({ rank: i + 1, cliente: c.nombre, hash: c.hash, score: c.score, territorio: c.territorio, accion: ACCIONES[i] ?? 'Seguimiento programado' }));
 
 const REPORTES_SEMANALES = [
   { semana: 'Semana 23 (Jun 2026)', fecha: 'Generado 05 Jun 2026', estado: 'Generado' },
@@ -86,7 +86,13 @@ export default function TendenciasPage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <span className="text-sm text-gray-400 w-3">{c.rank}</span>
-                      <span className="text-sm font-semibold text-gray-800">{c.cliente}</span>
+                      <span className="group/cli relative">
+                        <span className="text-sm font-semibold text-gray-800">{c.cliente}</span>
+                        <span className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden group-hover/cli:block whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 shadow-lg">
+                          <span className="text-[10px] text-white/50">customer_id (hash): </span>
+                          <span className="text-[11px] font-mono text-white">{c.hash}</span>
+                        </span>
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
