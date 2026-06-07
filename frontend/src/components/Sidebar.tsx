@@ -27,10 +27,6 @@ const NAV_IA = [
   { id: 'centro-voz',    label: 'Centro de Voz',   Icon: PhoneCall },
 ];
 
-const NAV_EXPORT = [
-  { id: 'exportaciones', label: 'Exportaciones',   Icon: Download },
-];
-
 export default function Sidebar({ active, onSelect }: SidebarProps) {
   return (
     <aside className="w-56 shrink-0 flex flex-col bg-brand-red text-white h-screen overflow-y-auto">
@@ -81,22 +77,19 @@ export default function Sidebar({ active, onSelect }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Footer nav */}
+      {/* Footer: descarga del submission */}
       <div className="px-3 pb-4 space-y-0.5">
-        {NAV_EXPORT.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            onClick={() => onSelect(id)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              active === id
-                ? 'bg-white/20 text-white'
-                : 'text-white/70 hover:bg-white/10 hover:text-white'
-            }`}
-          >
-            <Icon size={17} />
-            {label}
-          </button>
-        ))}
+        <a
+          href="/preds_submission.csv"
+          download="preds_submission.csv"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all"
+        >
+          <Download size={17} className="shrink-0" />
+          <span className="flex flex-col leading-tight">
+            Exportar predicciones
+            <span className="text-[10px] text-white/40 font-normal">submission .csv · 199,923</span>
+          </span>
+        </a>
         <div className="px-3 pt-3 text-[11px] text-white/40">
           Última actualización:<br />
           <span className="text-white/60">29 May 2025 10:30 AM</span>

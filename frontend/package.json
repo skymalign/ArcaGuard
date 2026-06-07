@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync-submission": "node -e \"require('fs').copyFileSync('../data/processed/preds_submission.csv','public/preds_submission.csv'); console.log('preds_submission.csv -> public/ ok')\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",

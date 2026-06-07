@@ -115,8 +115,14 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
             ) : filtered.map(c => (
               <tr key={c.id} className="hover:bg-gray-50/60 transition-colors">
                 <td className="px-5 py-4">
-                  <div className="font-semibold text-gray-900">{c.nombre}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{c.id}</div>
+                  <div className="group/cli relative inline-block">
+                    <div className="font-semibold text-gray-900">{c.nombre}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{c.id}</div>
+                    <div className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden group-hover/cli:block whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 shadow-lg">
+                      <span className="text-[10px] text-white/50">customer_id (hash): </span>
+                      <span className="text-[11px] font-mono text-white">{c.hash}</span>
+                    </div>
+                  </div>
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2">
@@ -212,8 +218,14 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
             ) : filtered.map(c => (
               <tr key={c.id} className="hover:bg-gray-50/60 transition-colors">
                 <td className="px-5 py-4">
-                  <div className="font-semibold text-gray-900">{c.nombre}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{c.id}</div>
+                  <div className="group/cli relative inline-block">
+                    <div className="font-semibold text-gray-900">{c.nombre}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{c.id}</div>
+                    <div className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden group-hover/cli:block whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 shadow-lg">
+                      <span className="text-[10px] text-white/50">customer_id (hash): </span>
+                      <span className="text-[11px] font-mono text-white">{c.hash}</span>
+                    </div>
+                  </div>
                 </td>
                 <td className="px-4 py-4 text-gray-700">{c.territorio}</td>
                 <td className="px-4 py-4 text-gray-700">{c.segmento}</td>
