@@ -17,7 +17,6 @@ interface SidebarProps {
 
 const NAV_MAIN = [
   { id: 'dashboard',     label: 'Dashboard',       Icon: LayoutDashboard },
-  { id: 'churn',         label: 'Riesgo de Churn', Icon: AlertTriangle },
   { id: 'segmentacion',  label: 'Segmentación',    Icon: BarChart2 },
   { id: 'territorios',   label: 'Territorios',     Icon: MapPin },
   { id: 'tendencias',    label: 'Tendencias',      Icon: TrendingUp },
