@@ -1,0 +1,14 @@
+# Datos procesados (se regeneran con src/features.py)
+data/processed/*.parquet
+data/processed/*.csv
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Modelos / artefactos
+*.pkl
+*.joblib

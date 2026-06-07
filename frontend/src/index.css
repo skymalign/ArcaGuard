@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #C8102E;
+  --color-brand-dark: #A50D26;
+  --color-brand-light: #E8192E;
+
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+html {
+  font-family: "IBM Plex Sans", sans-serif;
+}
