@@ -39,11 +39,15 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Charts row */}
-        <div className="grid grid-cols-3 gap-5">
-          <RiskDistributionChart />
-          <TerritoryChart />
-          <TrendChart />
+        {/* Charts row: tendencia grande + (territorio / distribución) al lado */}
+        <div className="grid grid-cols-3 gap-5 items-stretch">
+          <div className="col-span-2 min-h-0">
+            <TrendChart />
+          </div>
+          <div className="col-span-1 space-y-5">
+            <TerritoryChart />
+            <RiskDistributionChart />
+          </div>
         </div>
 
         {/* Risk factors */}

@@ -1,21 +1,18 @@
 import { useState } from 'react';
-import { ChevronLeft, Phone, PhoneOff } from 'lucide-react';
+import { ChevronLeft, ExternalLink, MessageSquare } from 'lucide-react';
 import { CLIENTES } from '../data/clientesData';
+import { COACH_PUBLIC_URL } from '../config/coachIa';
+import CoachIA, { type Interaccion } from '../components/CoachIA';
 
 interface CentroVozPageProps {
   clienteId?: string;
   onBack?: () => void;
 }
 
-const TELEFONOS: Record<string, string> = {
-  'CLI-001': '+52 55 1234 5678',
-};
-
 const HISTORIAL = [
   {
     fecha: '2026-06-05 14:30',
     sentimiento: 'Neutral',
-    duracion: '4:32',
     nota: 'Cliente cambió a competencia por precio. Abierto a retomar si mejoramos condiciones.',
   },
 ];
@@ -34,16 +31,9 @@ const SENT_BADGE: Record<string, string> = {
   Negativo: 'bg-red-100 text-brand-red',
 };
 
-const RIESGO_BADGE: Record<string, string> = {
-  Alto:  'bg-red-100 text-brand-red',
-  Medio: 'bg-amber-100 text-amber-700',
-  Bajo:  'bg-green-100 text-green-700',
-};
-
 export default function CentroVozPage({ clienteId = 'CLI-001', onBack }: CentroVozPageProps) {
   const cliente = CLIENTES.find((c) => c.id === clienteId) ?? CLIENTES[0];
-  const [enLlamada, setEnLlamada] = useState(false);
-  const telefono = TELEFONOS[cliente.id] ?? '+52 55 0000 0000';
+  const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
 
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50">
@@ -57,93 +47,101 @@ export default function CentroVozPage({ clienteId = 'CLI-001', onBack }: CentroV
           Volver a clientes
         </button>
         <h2 className="text-2xl font-bold text-gray-900">Centro de Voz IA</h2>
-        <p className="text-sm text-gray-500 mt-0.5">Llamadas con análisis en tiempo real</p>
+        <p className="text-sm text-gray-500 mt-0.5">Practica la conversación de retención con el Coach IA</p>
       </div>
 
       {/* Content */}
       <div className="px-8 py-7 grid grid-cols-3 gap-6">
-        {/* Left: call card */}
+        {/* Left: Coach IA card */}
         <div className="col-span-2">
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col items-center justify-center text-center px-8 py-16">
-            <div className="relative">
-              {enLlamada && (
-                <span className="absolute inset-0 rounded-2xl bg-brand-red/20 animate-ping" />
-              )}
-              <div
-                className={`relative w-20 h-20 rounded-2xl flex items-center justify-center ${
-                  enLlamada ? 'bg-brand-red text-white' : 'bg-gray-100 text-gray-400'
-                }`}
-              >
-                <Phone size={30} />
-              </div>
-            </div>
-
-            <h3 className="text-xl font-bold text-gray-900 mt-6">{cliente.nombre}</h3>
-            <p className="text-sm text-gray-500 mt-1">{telefono}</p>
-            <p className={`text-sm mt-1 ${enLlamada ? 'text-brand-red font-medium' : 'text-gray-400'}`}>
-              {enLlamada ? 'En llamada…' : 'Listo para llamar'}
+            <h3 className="text-xl font-bold text-gray-900">Coach IA de Retención</h3>
+            <p className="text-sm text-gray-500 mt-1 max-w-md">
+              Ensaya por voz la conversación con{' '}
+              <span className="font-semibold text-gray-700">{cliente.nombre}</span>{' '}
+              antes de contactarlo. El Coach IA responde en tiempo real.
             </p>
 
-            <button
-              onClick={() => setEnLlamada((v) => !v)}
-              className={`flex items-center gap-2 mt-8 px-6 py-3 rounded-lg text-sm font-semibold shadow-sm transition-colors ${
-                enLlamada
-                  ? 'bg-gray-800 hover:bg-gray-900 text-white'
-                  : 'bg-brand-red hover:bg-brand-dark text-white'
-              }`}
+            {/* Coach IA por voz con el SDK de ElevenLabs (in-app, sin backend) */}
+            <div className="mt-8">
+              <CoachIA
+                contexto={`Practicando retención con ${cliente.nombre}`}
+                onInteraction={(i) => setInteracciones((prev) => [...prev, i])}
+              />
+            </div>
+
+            {/* Alternativa: abrir el agente en una pestaña nueva */}
+            <a
+              href={COACH_PUBLIC_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 mt-8 text-sm text-gray-500 hover:text-brand-red transition-colors"
             >
-              {enLlamada ? <PhoneOff size={16} /> : <Phone size={16} />}
-              {enLlamada ? 'Finalizar Llamada' : 'Iniciar Llamada'}
-            </button>
+              <ExternalLink size={14} />
+              Abrir el Coach en una pestaña nueva
+            </a>
           </div>
         </div>
 
-        {/* Right: panels */}
+        {/* Right: panels de contexto */}
         <div className="space-y-6">
-          {/* Cliente */}
+          {/* Interacciones del Coach IA (en vivo, vía onMessage del SDK) */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
-            <h3 className="text-base font-semibold text-gray-800 mb-4">Cliente</h3>
-            <div className="space-y-3.5">
-              <div>
-                <p className="text-xs text-gray-400">ID</p>
-                <p className="text-sm font-semibold text-gray-900 mt-0.5">{cliente.id}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400">Territorio</p>
-                <p className="text-sm font-semibold text-gray-900 mt-0.5">{cliente.territorio}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400">Score de riesgo</p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-sm font-bold text-gray-900">{cliente.score}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${RIESGO_BADGE[cliente.riesgo]}`}>
-                    {cliente.riesgo}
-                  </span>
-                </div>
-              </div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-semibold text-gray-800">Última interacción</h3>
+              {interacciones.length > 0 && (
+                <button
+                  onClick={() => setInteracciones([])}
+                  className="text-xs text-gray-400 hover:text-brand-red transition-colors"
+                >
+                  Limpiar
+                </button>
+              )}
             </div>
-          </div>
 
-          {/* Historial de Llamadas */}
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
-            <h3 className="text-base font-semibold text-gray-800 mb-4">Historial de Llamadas</h3>
-            {HISTORIAL.map((h) => (
-              <div key={h.fecha}>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-gray-900">{h.fecha}</p>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${SENT_BADGE[h.sentimiento]}`}>
-                    {h.sentimiento}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-400 mt-0.5">{h.duracion}</p>
-                <p className="text-sm text-gray-600 mt-2 leading-relaxed">{h.nota}</p>
+            {interacciones.length === 0 ? (
+              <>
+                {HISTORIAL.map((h) => (
+                  <div key={h.fecha}>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-gray-900">{h.fecha}</p>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${SENT_BADGE[h.sentimiento]}`}>
+                        {h.sentimiento}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2 leading-relaxed">{h.nota}</p>
+                  </div>
+                ))}
+                <p className="text-xs text-gray-400 mt-3">
+                  Las interacciones con el Coach IA aparecerán aquí en vivo al iniciar la conversación.
+                </p>
+              </>
+            ) : (
+              <div className="space-y-2.5 max-h-80 overflow-y-auto">
+                {interacciones.map((it, i) => (
+                  <div key={`${it.ts}-${i}`} className={it.source === 'user' ? 'text-right' : 'text-left'}>
+                    <span className="text-[10px] uppercase tracking-wide text-gray-400">
+                      {it.source === 'user' ? 'Tú' : 'Coach IA'}
+                    </span>
+                    <p
+                      className={`mt-0.5 inline-block px-3 py-1.5 rounded-lg text-sm ${
+                        it.source === 'user' ? 'bg-brand-red/10 text-gray-800' : 'bg-gray-100 text-gray-700'
+                      }`}
+                    >
+                      {it.message}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
 
-          {/* Script Sugerido */}
+          {/* Guía sugerida */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
-            <h3 className="text-base font-semibold text-gray-800 mb-4">Script Sugerido</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <MessageSquare size={16} className="text-gray-400" />
+              <h3 className="text-base font-semibold text-gray-800">Guía sugerida</h3>
+            </div>
             <ol className="space-y-2 text-sm text-gray-600">
               {SCRIPT.map((s, i) => (
                 <li key={s} className="flex gap-2">

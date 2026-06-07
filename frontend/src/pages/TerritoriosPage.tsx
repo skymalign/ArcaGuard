@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
-import { Download, AlertTriangle, X, Building2, BarChart3, Users } from 'lucide-react';
+import { geoCentroid } from 'd3-geo';
+import { AlertTriangle, X, Building2, BarChart3, Users } from 'lucide-react';
 import { CHURN_TERRITORIO, churnNivel, churnColor, KPIS } from '../data/modelData';
 import { CLIENTES } from '../data/clientesData';
 
@@ -29,6 +30,19 @@ const TERRITORIOS = CHURN_TERRITORIO.map((t, i) => ({
   color: churnColor(t.churnPct),
 }));
 type Terr = typeof TERRITORIOS[0];
+
+// Territorio Arca más cercano a un punto [lng, lat] (para colorear los estados).
+function nearestTerr(lng: number, lat: number): Terr {
+  let best = TERRITORIOS[0];
+  let bd = Infinity;
+  for (const t of TERRITORIOS) {
+    const dx = t.coords[0] - lng;
+    const dy = t.coords[1] - lat;
+    const d = dx * dx + dy * dy;
+    if (d < bd) { bd = d; best = t; }
+  }
+  return best;
+}
 
 const MAX_CHURN = TERRITORIOS[0].churnPct;
 const PROMEDIO = KPIS.churnRatePct; // churn rate global real desde modelData.ts
@@ -171,20 +185,26 @@ export default function TerritoriosPage() {
                 <ZoomableGroup zoom={1} minZoom={0.8} maxZoom={4}>
                   <Geographies geography={MEX_TOPO}>
                     {({ geographies }) =>
-                      geographies.map((geo) => (
-                        <Geography
-                          key={geo.rsmKey}
-                          geography={geo}
-                          fill="#E2E8F0"
-                          stroke="#CBD5E1"
-                          strokeWidth={0.5}
-                          style={{
-                            default: { outline: 'none' },
-                            hover: { outline: 'none', fill: '#D1D9E6' },
-                            pressed: { outline: 'none' },
-                          }}
-                        />
-                      ))
+                      geographies.map((geo) => {
+                        const [clng, clat] = geoCentroid(geo as never);
+                        const terr = nearestTerr(clng, clat);
+                        const selState = selected != null && terr.id === selected;
+                        return (
+                          <Geography
+                            key={geo.rsmKey}
+                            geography={geo}
+                            onClick={() => handlePin(terr.id)}
+                            fill={terr.color}
+                            stroke="#FFFFFF"
+                            strokeWidth={0.6}
+                            style={{
+                              default: { outline: 'none', fillOpacity: selState ? 0.6 : 0.28 },
+                              hover: { outline: 'none', fillOpacity: 0.5, cursor: 'pointer' },
+                              pressed: { outline: 'none' },
+                            }}
+                          />
+                        );
+                      })
                     }
                   </Geographies>
 
