@@ -1,3 +1,4 @@
+import arcaLogo from '../assets/arcaLogo.png'
 import {
   LayoutDashboard,
   BarChart2,
@@ -32,10 +33,12 @@ export default function Sidebar({ active, onSelect }: SidebarProps) {
     <aside className="w-56 shrink-0 flex flex-col bg-brand-red text-white h-screen overflow-y-auto">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/20">
-        <div className="w-8 h-8 bg-white/20 rounded-md flex items-center justify-center">
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
-            <path d="M12 2L3 7v10l9 5 9-5V7L12 2zm0 2.2L19 8v8l-7 3.9L5 16V8l7-3.8z"/>
-          </svg>
+        <div className="w-8 h-8 bg-white/50 rounded-md flex items-center justify-center overflow-hidden">
+          <img
+            src={arcaLogo}
+            alt="Logo"
+            className="w-full h-full object-cover"
+          />
         </div>
         <span className="font-bold tracking-wide text-sm uppercase">Arca Continental</span>
       </div>
@@ -57,7 +60,7 @@ export default function Sidebar({ active, onSelect }: SidebarProps) {
           </button>
         ))}
 
-        <div className="pt-5 pb-1 px-3">
+        <div className="pt-8 pb-1 px-3">
           <span className="text-xs uppercase tracking-widest text-white/40 font-semibold">IA</span>
         </div>
 

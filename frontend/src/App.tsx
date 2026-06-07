@@ -9,14 +9,14 @@ import TendenciasPage from './pages/TendenciasPage';
 import AccionesIaPage from './pages/AccionesIaPage';
 import CentroVozPage from './pages/CentroVozPage';
 
-const FULLSCREEN = ['tendencias', 'acciones-ia', 'centro-voz'];
+const FULLSCREEN = ['acciones-ia', 'centro-voz'];
 
-const TITLES: Record<string, { title: string; subtitle: string }> = {
-  dashboard:    { title: 'Dashboard',    subtitle: 'Monitoreo de Riesgo de Churn' },
-  segmentacion: { title: 'Segmentación', subtitle: 'Análisis detallado del modelo predictivo' },
-  territorios:  { title: 'Territorios',  subtitle: 'Distribución territorial del riesgo' },
-  tendencias:   { title: 'Tendencias',   subtitle: 'Evolución del riesgo en el tiempo' },
-  clientes:     { title: 'Clientes',     subtitle: 'Gestión y monitoreo de cartera' },
+const TITLES: Record<string, { title: string }> = {
+  dashboard:    { title: 'Dashboard' },
+  segmentacion: { title: 'Segmentación' },
+  territorios:  { title: 'Territorios' },
+  tendencias:   { title: 'Tendencias' },
+  clientes:     { title: 'Clientes' },
 };
 
 export default function App() {

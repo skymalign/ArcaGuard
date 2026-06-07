@@ -30,11 +30,6 @@ export default function SegmentacionPage() {
     <div className="flex-1 overflow-y-auto bg-gray-50">
       <div className="max-w-screen-2xl mx-auto px-8 py-7 space-y-6">
 
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Segmentación</h2>
-          <p className="text-sm text-gray-500 mt-0.5">Análisis detallado del modelo predictivo · validación 202601</p>
-        </div>
-
         {/* Recall@Top-K */}
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
           <div className="px-8 pt-7 pb-2">
