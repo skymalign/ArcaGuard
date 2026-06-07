@@ -79,8 +79,8 @@ export default function AccionesIaPage({ clienteId = 'CLI-001', onBack }: Accion
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-400">Revenue en riesgo</p>
-            <p className="text-3xl font-bold text-gray-900 mt-0.5">{cliente.revenue}</p>
+            <p className="text-xs text-gray-400">Probabilidad de churn</p>
+            <p className="text-3xl font-bold text-brand-red mt-0.5">{cliente.score}%</p>
           </div>
         </div>
       </div>

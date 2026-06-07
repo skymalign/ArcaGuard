@@ -1,20 +1,22 @@
 import { Download, FileText } from 'lucide-react';
+import { CLIENTES } from '../data/clientesData';
+import { territorioChurn, churnColor } from '../data/modelData';
 
 // ── Datos ──────────────────────────────────────────────────────────────────────
+// KPIs reales del modelo / negocio (reports/charts.json).
 const KPIS = [
-  { label: 'Clientes Contactados', value: '24' },
-  { label: 'Retenciones Exitosas', value: '19', sub: '79% conversión' },
-  { label: 'Revenue Recuperado',   value: '$1.9M' },
-  { label: 'Respuesta Positiva',   value: '68%' },
+  { label: 'Clientes en Alto Riesgo',   value: '10,276' },
+  { label: 'Recall @ Top 10%',          value: '87%',    sub: 'lift 8.7×' },
+  { label: 'Revenue en Riesgo / mes',   value: '$12.0M' },
+  { label: 'Direccionable (Top 10%)',   value: '$10.5M' },
 ];
 
-const LISTA_PRIORIZADA = [
-  { rank: 1, cliente: 'Distribuidora López',      score: 94, revenue: '$456K', accion: 'Visita urgente programada' },
-  { rank: 2, cliente: 'Super Abarrotes El Güero', score: 92, revenue: '$340K', accion: 'Llamada agendada para hoy' },
-  { rank: 3, cliente: 'Abarrotes San Judas',      score: 89, revenue: '$289K', accion: 'Propuesta enviada' },
-  { rank: 4, cliente: 'Tienda La Esperanza',      score: 87, revenue: '$125K', accion: 'Pendiente contacto' },
-  { rank: 5, cliente: 'Taquería El Tizoncito',    score: 82, revenue: '$112K', accion: 'Seguimiento en 3 días' },
-];
+// Lista priorizada derivada de los clientes en seguimiento (top por score).
+const ACCIONES = ['Visita urgente programada', 'Llamada agendada para hoy', 'Propuesta enviada', 'Pendiente contacto', 'Seguimiento en 3 días'];
+const LISTA_PRIORIZADA = [...CLIENTES]
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 5)
+  .map((c, i) => ({ rank: i + 1, cliente: c.nombre, score: c.score, territorio: c.territorio, accion: ACCIONES[i] ?? 'Seguimiento programado' }));
 
 const REPORTES_SEMANALES = [
   { semana: 'Semana 23 (Jun 2026)', fecha: 'Generado 05 Jun 2026', estado: 'Generado' },
@@ -23,10 +25,10 @@ const REPORTES_SEMANALES = [
 ];
 
 const IMPACTO = [
-  { label: 'Clientes Retenidos',   value: '19',    highlight: true },
-  { label: 'Revenue Protegido',    value: '$1.9M', highlight: false },
-  { label: 'Tasa de Conversión',   value: '79%',   highlight: false },
-  { label: 'Acciones Completadas', value: '24',    highlight: false },
+  { label: 'Clientes en alto riesgo', value: '10,276', highlight: false },
+  { label: 'Revenue direccionable',   value: '$10.5M', highlight: true },
+  { label: 'Recall @ Top 10%',        value: '87%',    highlight: true },
+  { label: 'Lift vs. azar',           value: '8.7×',   highlight: false },
 ];
 
 // ── Página ──────────────────────────────────────────────────────────────────────
@@ -73,7 +75,7 @@ export default function TendenciasPage() {
               <tr className="text-left text-xs uppercase tracking-wider text-gray-400 border-b border-gray-100">
                 <th className="px-6 py-3 font-semibold">Cliente</th>
                 <th className="px-6 py-3 font-semibold">Score</th>
-                <th className="px-6 py-3 font-semibold">Revenue</th>
+                <th className="px-6 py-3 font-semibold">Territorio</th>
                 <th className="px-6 py-3 font-semibold">Acción</th>
                 <th className="px-6 py-3" />
               </tr>
@@ -93,7 +95,14 @@ export default function TendenciasPage() {
                       <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-brand-red">Alto</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{c.revenue}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {c.territorio}
+                    {territorioChurn(c.territorio) != null && (
+                      <span className="ml-2 text-xs font-semibold" style={{ color: churnColor(territorioChurn(c.territorio)!) }}>
+                        {territorioChurn(c.territorio)}%
+                      </span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{c.accion}</td>
                   <td className="px-6 py-4 text-right">
                     <button className="px-4 py-1.5 bg-brand-red hover:bg-brand-dark text-white rounded-md text-sm font-semibold transition-colors">

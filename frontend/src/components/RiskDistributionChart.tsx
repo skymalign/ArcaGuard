@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { RISK_DISTRIBUTION } from '../data/mockData';
+import { NIVELES_RIESGO as RISK_DISTRIBUTION } from '../data/modelData';
 
 export default function RiskDistributionChart() {
   return (
@@ -26,7 +26,7 @@ export default function RiskDistributionChart() {
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number) => [value.toLocaleString(), '']}
+                formatter={(value) => [Number(value).toLocaleString(), '']}
                 contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
               />
             </PieChart>

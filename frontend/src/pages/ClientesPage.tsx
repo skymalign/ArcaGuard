@@ -1,6 +1,18 @@
 import { useState, useMemo } from 'react';
 import { Search, Download, List, LayoutGrid, ChevronDown, Phone } from 'lucide-react';
 import { CLIENTES, type Cliente, type RiskLevel } from '../data/clientesData';
+import { territorioChurn, churnColor } from '../data/modelData';
+
+// Totales reales del scoring (scoring_clientes.csv) — universo completo.
+const TOTAL_REAL = { alto: 10276, medio: 20361, bajo: 169286, total: 199923 };
+
+// Celda con el churn real del territorio del cliente (reemplaza a 'Revenue',
+// que no existe en los datos del modelo).
+function ChurnTerritorioCell({ territorio }: { territorio: string }) {
+  const pct = territorioChurn(territorio);
+  if (pct == null) return <span className="text-gray-400">—</span>;
+  return <span className="font-semibold" style={{ color: churnColor(pct) }}>{pct}%</span>;
+}
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -10,7 +22,7 @@ const RISK_BADGE: Record<RiskLevel, string> = {
   Bajo:  'bg-green-100 text-green-700 border border-green-200',
 };
 
-const TERRITORIOS = ['Todos los territorios', 'CDMX', 'Monterrey', 'Guadalajara', 'Puebla', 'Tijuana', 'Querétaro', 'Veracruz'];
+const TERRITORIOS = ['Todos los territorios', ...Array.from(new Set(CLIENTES.map(c => c.territorio))).sort()];
 const RIESGOS     = ['Todos los riesgos', 'Alto', 'Medio', 'Bajo'];
 const SUBCANALES  = ['Todos los subcanales', 'Coca-Cola', 'Monster Energy', 'Powerade', 'Jugos Del Valle', 'Agua Ciel', 'Café del Pacífico'];
 
@@ -48,23 +60,18 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
     });
   }, [clientes, buscar, riesgo, territorio, subcanal]);
 
-  const counts = useMemo(() => ({
-    alto:  clientes.filter(c => c.riesgo === 'Alto').length,
-    medio: clientes.filter(c => c.riesgo === 'Medio').length,
-    bajo:  clientes.filter(c => c.riesgo === 'Bajo').length,
-  }), [clientes]);
-
   return (
     <div className="space-y-4">
-      {/* Summary pills */}
-      <div className="flex items-center gap-4 text-sm">
-        <span className="text-gray-500">Alto Riesgo: <span className="font-semibold text-brand-red">{counts.alto}</span></span>
+      {/* Summary pills — totales reales del scoring (199,923 clientes) */}
+      <div className="flex items-center gap-4 text-sm flex-wrap">
+        <span className="text-gray-500">Alto Riesgo: <span className="font-semibold text-brand-red">{TOTAL_REAL.alto.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Medio Riesgo: <span className="font-semibold text-amber-600">{counts.medio}</span></span>
+        <span className="text-gray-500">Medio Riesgo: <span className="font-semibold text-amber-600">{TOTAL_REAL.medio.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Bajo Riesgo: <span className="font-semibold text-green-600">{counts.bajo}</span></span>
+        <span className="text-gray-500">Bajo Riesgo: <span className="font-semibold text-green-600">{TOTAL_REAL.bajo.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Total: <span className="font-semibold text-gray-800">{clientes.length}</span></span>
+        <span className="text-gray-500">Total: <span className="font-semibold text-gray-800">{TOTAL_REAL.total.toLocaleString()}</span></span>
+        <span className="ml-auto text-xs text-gray-400">Mostrando muestra de {clientes.length} clientes prioritarios</span>
       </div>
 
       {/* Filters */}
@@ -98,7 +105,7 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Inactividad</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Cambio</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Territorio</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Churn Territorio</th>
               <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
@@ -130,7 +137,7 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
                   <div className="text-gray-700">{c.territorio}</div>
                   <div className="text-xs text-gray-400">{c.subcanalMarca}</div>
                 </td>
-                <td className="px-4 py-4 font-semibold text-gray-800">{c.revenue}</td>
+                <td className="px-4 py-4"><ChurnTerritorioCell territorio={c.territorio} /></td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2 justify-end">
                     <button className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap">
@@ -195,7 +202,7 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
               <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Cliente</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Territorio</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Segmento</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Churn Territorio</th>
               <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
@@ -210,7 +217,7 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
                 </td>
                 <td className="px-4 py-4 text-gray-700">{c.territorio}</td>
                 <td className="px-4 py-4 text-gray-700">{c.segmento}</td>
-                <td className="px-4 py-4 font-semibold text-gray-800">{c.revenue}</td>
+                <td className="px-4 py-4"><ChurnTerritorioCell territorio={c.territorio} /></td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2 justify-end">
                     <button className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap">

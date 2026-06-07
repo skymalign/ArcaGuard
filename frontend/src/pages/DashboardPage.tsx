@@ -13,8 +13,8 @@ const KPI_DATA = [
   },
   {
     title: 'Clientes en Alto Riesgo',
-    value: '20,034',
-    subtitle: '10% del total',
+    value: '10,276',
+    subtitle: '5.1% del total',
     variant: 'warning' as const,
   },
   {

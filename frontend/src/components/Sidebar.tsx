@@ -1,6 +1,5 @@
 import {
   LayoutDashboard,
-  AlertTriangle,
   BarChart2,
   MapPin,
   TrendingUp,
