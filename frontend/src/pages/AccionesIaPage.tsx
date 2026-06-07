@@ -172,7 +172,7 @@ export default function AccionesIaPage({ clienteId = "CLI-001", onBack }: Accion
 
           {loading && estrategias.length === 0 && (
             <div className="bg-white border border-gray-200 rounded-xl p-6 text-sm text-gray-500">
-              Gemini está generando estrategias para este cliente...
+              La IA está generando estrategias para el cliente...
             </div>
           )}
 
