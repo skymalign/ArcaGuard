@@ -3,8 +3,8 @@ import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 're
 import { Download, ChevronDown, Users, AlertTriangle, TrendingUp, X } from 'lucide-react';
 import { CLIENTES } from '../data/clientesData';
 
-// ── Geo JSON for Mexico ───────────────────────────────────────────────────────
-const MEX_TOPO = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
+// ── Geo JSON for Mexico (estados) ─────────────────────────────────────────────
+const MEX_TOPO = '/mexico-states.json';
 
 // ── Territory data ────────────────────────────────────────────────────────────
 const TERRITORIOS = [
@@ -18,6 +18,29 @@ const TERRITORIOS = [
 ];
 
 const SUBCANALES = ['Todos los subcanales', 'Coca-Cola', 'Monster Energy', 'Powerade', 'Jugos Del Valle'];
+
+// Cada estado de México (properties.name del GeoJSON) → id del territorio al que
+// pertenece. Se usa para pintar el choropleth con el score de ese territorio.
+const STATE_TO_TERR: Record<string, string> = {
+  // Tijuana (noroeste)
+  'Baja California': 'tijuana', 'Baja California Sur': 'tijuana', 'Sonora': 'tijuana',
+  'Sinaloa': 'tijuana', 'Chihuahua': 'tijuana', 'Durango': 'tijuana',
+  // Monterrey (noreste)
+  'Nuevo León': 'monterrey', 'Coahuila': 'monterrey', 'Tamaulipas': 'monterrey',
+  'Zacatecas': 'monterrey', 'San Luis Potosí': 'monterrey',
+  // Guadalajara (occidente)
+  'Jalisco': 'guadalajara', 'Nayarit': 'guadalajara', 'Colima': 'guadalajara',
+  'Aguascalientes': 'guadalajara', 'Michoacán': 'guadalajara', 'Guanajuato': 'guadalajara',
+  // Querétaro (bajío)
+  'Querétaro': 'queretaro', 'Hidalgo': 'queretaro',
+  // CDMX (centro)
+  'Ciudad de México': 'cdmx', 'México': 'cdmx', 'Morelos': 'cdmx', 'Tlaxcala': 'cdmx',
+  // Puebla
+  'Puebla': 'puebla', 'Oaxaca': 'puebla', 'Guerrero': 'puebla',
+  // Veracruz (sureste)
+  'Veracruz': 'veracruz', 'Tabasco': 'veracruz', 'Chiapas': 'veracruz',
+  'Campeche': 'veracruz', 'Yucatán': 'veracruz', 'Quintana Roo': 'veracruz',
+};
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function scoreColor(score: number) {
@@ -206,22 +229,28 @@ export default function TerritoriosPage() {
                 <ZoomableGroup zoom={1} minZoom={0.8} maxZoom={4}>
                   <Geographies geography={MEX_TOPO}>
                     {({ geographies }) =>
-                      geographies
-                        .filter((geo) => geo.properties.name === 'Mexico')
-                        .map((geo) => (
+                      geographies.map((geo) => {
+                        const terrId = STATE_TO_TERR[geo.properties.name];
+                        const terr = TERRITORIOS.find(t => t.id === terrId);
+                        const base = terr ? scoreColor(terr.score) : '#E2E8F0';
+                        const isSel = !!terr && selected === terr.id;
+                        return (
                           <Geography
                             key={geo.rsmKey}
                             geography={geo}
-                            fill="#E2E8F0"
-                            stroke="#CBD5E1"
-                            strokeWidth={0.5}
+                            fill={base}
+                            fillOpacity={isSel ? 0.6 : 0.3}
+                            stroke="#FFFFFF"
+                            strokeWidth={0.6}
+                            onClick={() => terrId && handlePin(terrId)}
                             style={{
                               default: { outline: 'none' },
-                              hover:   { outline: 'none', fill: '#D1D9E6' },
+                              hover:   { outline: 'none', fillOpacity: terr ? 0.5 : 0.3, cursor: terr ? 'pointer' : 'default' },
                               pressed: { outline: 'none' },
                             }}
                           />
-                        ))
+                        );
+                      })
                     }
                   </Geographies>
 
