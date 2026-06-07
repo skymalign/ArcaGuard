@@ -4,7 +4,7 @@
   "modelos": [
     {
       "modelo": "LogReg (baseline)",
-      "pr_auc": 0.212,
+      "pr_auc": 0.2122,
       "roc_auc": 0.9476
     },
     {

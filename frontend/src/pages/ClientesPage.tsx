@@ -25,14 +25,14 @@ function ChurnTerritorioCell({ territorio }: { territorio: string }) {
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 const RISK_BADGE: Record<RiskLevel, string> = {
-  Alto:  'bg-red-100 text-brand-red border border-red-200',
+  Alto: 'bg-red-100 text-brand-red border border-red-200',
   Medio: 'bg-amber-100 text-amber-700 border border-amber-200',
-  Bajo:  'bg-green-100 text-green-700 border border-green-200',
+  Bajo: 'bg-green-100 text-green-700 border border-green-200',
 };
 
 const TERRITORIOS = ['Todos los territorios', ...Array.from(new Set(CLIENTES.map(c => c.territorio))).sort()];
-const RIESGOS     = ['Todos los riesgos', 'Alto', 'Medio', 'Bajo'];
-const SUBCANALES  = ['Todos los subcanales', 'Coca-Cola', 'Monster Energy', 'Powerade', 'Jugos Del Valle', 'Agua Ciel', 'Café del Pacífico'];
+const RIESGOS = ['Todos los riesgos', 'Alto', 'Medio', 'Bajo'];
+const SUBCANALES = ['Todos los subcanales', 'Coca-Cola', 'Monster Energy', 'Powerade', 'Jugos Del Valle', 'Agua Ciel', 'Café del Pacífico'];
 
 function Select({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   return (
@@ -51,19 +51,19 @@ function Select({ value, onChange, options }: { value: string; onChange: (v: str
 
 // ── Riesgo de Churn tab ───────────────────────────────────────────────────────
 
-function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
-  const [buscar, setBuscar]     = useState('');
-  const [riesgo, setRiesgo]     = useState('Todos los riesgos');
-  const [territorio, setTerr]   = useState('Todos los territorios');
-  const [subcanal, setSub]      = useState('Todos los subcanales');
-  const [vista, setVista]       = useState<'list' | 'grid'>('list');
+function TabRiesgo({ clientes, onPlanIA }: { clientes: Cliente[]; onPlanIA?: (clienteId: string) => void; }) {
+  const [buscar, setBuscar] = useState('');
+  const [riesgo, setRiesgo] = useState('Todos los riesgos');
+  const [territorio, setTerr] = useState('Todos los territorios');
+  const [subcanal, setSub] = useState('Todos los subcanales');
+  const [vista, setVista] = useState<'list' | 'grid'>('list');
 
   const filtered = useMemo(() => {
     return clientes.filter(c => {
-      const matchBuscar    = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
-      const matchRiesgo    = riesgo === 'Todos los riesgos' || c.riesgo === riesgo;
+      const matchBuscar = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
+      const matchRiesgo = riesgo === 'Todos los riesgos' || c.riesgo === riesgo;
       const matchTerritorio = territorio === 'Todos los territorios' || c.territorio === territorio;
-      const matchSubcanal  = subcanal === 'Todos los subcanales' || c.subcanalMarca === subcanal;
+      const matchSubcanal = subcanal === 'Todos los subcanales' || c.subcanalMarca === subcanal;
       return matchBuscar && matchRiesgo && matchTerritorio && matchSubcanal;
     });
   }, [clientes, buscar, riesgo, territorio, subcanal]);
@@ -150,7 +150,11 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
                 <td className="px-4 py-4"><ChurnTerritorioCell territorio={c.territorio} /></td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap">
+                    {/* Redirect to acciones IA */}
+                    <button
+                      onClick={() => onPlanIA?.(c.id)}
+                      className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap"
+                    >
                       Plan IA
                     </button>
                     <button className="px-3 py-1.5 border border-gray-200 text-gray-600 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5">
@@ -170,14 +174,20 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
 
 // ── Todos los Clientes tab ────────────────────────────────────────────────────
 
-function TabTodos({ clientes }: { clientes: Cliente[] }) {
-  const [buscar, setBuscar]   = useState('');
+function TabTodos({
+  clientes,
+  onPlanIA,
+}: {
+  clientes: Cliente[];
+  onPlanIA?: (clienteId: string) => void;
+}) {
+  const [buscar, setBuscar] = useState('');
   const [territorio, setTerr] = useState('Todos los territorios');
-  const [vista, setVista]     = useState<'list' | 'grid'>('list');
+  const [vista, setVista] = useState<'list' | 'grid'>('list');
 
   const filtered = useMemo(() => {
     return clientes.filter(c => {
-      const matchBuscar     = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
+      const matchBuscar = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
       const matchTerritorio = territorio === 'Todos los territorios' || c.territorio === territorio;
       return matchBuscar && matchTerritorio;
     });
@@ -236,7 +246,10 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
                 <td className="px-4 py-4"><ChurnTerritorioCell territorio={c.territorio} /></td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap">
+                    <button
+                      onClick={() => onPlanIA?.(c.id)}
+                      className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap"
+                    >
                       Plan IA
                     </button>
                     <button className="px-3 py-1.5 border border-gray-200 text-gray-600 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5">
@@ -257,8 +270,12 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 type Tab = 'riesgo' | 'todos';
+// Lets it redirect to client
+interface ClientesPageProps {
+  onPlanIA?: (clienteId: string) => void;
+}
 
-export default function ClientesPage() {
+export default function ClientesPage({ onPlanIA }: ClientesPageProps) {
   const [tab, setTab] = useState<Tab>('riesgo');
 
   // For demo: "Riesgo de Churn" tab only shows clients with risk score
@@ -288,8 +305,8 @@ export default function ClientesPage() {
 
         {/* Tab content */}
         {tab === 'riesgo'
-          ? <TabRiesgo clientes={clientesChurn} />
-          : <TabTodos  clientes={CLIENTES} />
+          ? <TabRiesgo clientes={clientesChurn} onPlanIA={onPlanIA} />
+          : <TabTodos clientes={CLIENTES} onPlanIA={onPlanIA} />
         }
       </div>
     </div>
