@@ -38,7 +38,7 @@ function resolveApiUrl() {
   }
 
   if (import.meta.env.PROD) {
-    throw new Error("La app no tiene configurado VITE_API_URL en producción.");
+    throw new Error("La app no tiene configurada VITE_API_URL en producción.");
   }
 
   return "http://localhost:8000";

@@ -3,6 +3,7 @@ import json
 import logging
 import time
 from collections import defaultdict, deque
+from threading import Lock
 from typing import Optional, Any, Dict, Deque, DefaultDict
 
 from dotenv import load_dotenv
@@ -46,6 +47,7 @@ app.add_middleware(
 )
 
 request_history: DefaultDict[str, Deque[float]] = defaultdict(deque)
+request_history_lock = Lock()
 
 
 def get_request_identifier(request: Request) -> str:
@@ -70,24 +72,32 @@ def validate_api_key(request: Request) -> None:
 @app.middleware("http")
 async def protect_api(request: Request, call_next):
     if request.url.path == "/recommendation":
+        content_length = request.headers.get("content-length")
+        if content_length is not None:
+            try:
+                if int(content_length) > MAX_REQUEST_BYTES:
+                    return JSONResponse(
+                        status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                        content={"source": "service_protection", "error": "Request body too large."},
+                    )
+            except ValueError:
+                return JSONResponse(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    content={"source": "service_protection", "error": "Invalid Content-Length header."},
+                )
+
         requester = get_request_identifier(request)
         now = time.time()
-        window = request_history[requester]
-        while window and now - window[0] > 60:
-            window.popleft()
-        if len(window) >= RATE_LIMIT_PER_MINUTE:
-            return JSONResponse(status_code=status.HTTP_429_TOO_MANY_REQUESTS, content={
-                "source": "service_protection",
-                "error": "Too many requests. Please retry shortly.",
-            })
-        window.append(now)
-
-        body = await request.body()
-        if len(body) > MAX_REQUEST_BYTES:
-            return JSONResponse(
-                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-                content={"source": "service_protection", "error": "Request body too large."},
-            )
+        with request_history_lock:
+            window = request_history[requester]
+            while window and now - window[0] > 60:
+                window.popleft()
+            if len(window) >= RATE_LIMIT_PER_MINUTE:
+                return JSONResponse(status_code=status.HTTP_429_TOO_MANY_REQUESTS, content={
+                    "source": "service_protection",
+                    "error": "Too many requests. Please retry shortly.",
+                })
+            window.append(now)
 
     return await call_next(request)
 
