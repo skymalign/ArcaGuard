@@ -23,7 +23,6 @@ const NAV_MAIN = [
 ];
 
 const NAV_IA = [
-  { id: 'acciones-ia',   label: 'Acciones IA',     Icon: Sparkles },
   { id: 'centro-voz',    label: 'Centro de Voz',   Icon: PhoneCall },
 ];
 
