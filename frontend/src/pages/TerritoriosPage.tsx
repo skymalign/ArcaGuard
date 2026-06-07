@@ -147,20 +147,13 @@ export default function TerritoriosPage() {
   return (
     <div className="flex flex-col flex-1 overflow-hidden bg-gray-50">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Mapa de Riesgo</h2>
-          <p className="text-sm text-gray-500 mt-0.5">Tasa de churn real por territorio Arca · validación 202601</p>
-        </div>
-        <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 bg-white hover:bg-gray-50 transition-colors shadow-sm">
-          <Download size={15} />
-          Exportar
-        </button>
+      <div className="flex items-center justify-between px-8 py-6">
+          <h2 className="text-2xl font-bold text-[#1F2937]">Mapa de Riesgo</h2>
       </div>
 
       {/* Content */}
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+        <div className="flex-1 overflow-y-auto px-8 py-1 space-y-6">
 
           {/* Map card */}
           <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">

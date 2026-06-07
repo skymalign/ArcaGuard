@@ -72,14 +72,14 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
     <div className="space-y-4">
       {/* Summary pills — totales reales del scoring (199,923 clientes) */}
       <div className="flex items-center gap-4 text-sm flex-wrap">
-        <span className="text-gray-500">Alto Riesgo: <span className="font-semibold text-brand-red">{TOTAL_REAL.alto.toLocaleString()}</span></span>
+        <span className="text-gray-500 text-[18px]">Alto Riesgo: <span className="font-semibold text-brand-red">{TOTAL_REAL.alto.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Medio Riesgo: <span className="font-semibold text-amber-600">{TOTAL_REAL.medio.toLocaleString()}</span></span>
+        <span className="text-gray-500 text-[18px]">Medio Riesgo: <span className="font-semibold text-amber-600">{TOTAL_REAL.medio.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Bajo Riesgo: <span className="font-semibold text-green-600">{TOTAL_REAL.bajo.toLocaleString()}</span></span>
+        <span className="text-gray-500 text-[18px]">Bajo Riesgo: <span className="font-semibold text-green-600">{TOTAL_REAL.bajo.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Total: <span className="font-semibold text-gray-800">{TOTAL_REAL.total.toLocaleString()}</span></span>
-        <span className="ml-auto text-xs text-gray-400">Mostrando muestra de {clientes.length} clientes prioritarios</span>
+        <span className="text-gray-500 text-[18px]">Total: <span className="font-semibold text-gray-800">{TOTAL_REAL.total.toLocaleString()}</span></span>
+        
       </div>
 
       {/* Filters */}
@@ -97,10 +97,6 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
         <Select value={riesgo}     onChange={setRiesgo}     options={RIESGOS} />
         <Select value={territorio} onChange={setTerr}       options={TERRITORIOS} />
         <Select value={subcanal}   onChange={setSub}        options={SUBCANALES} />
-        <div className="ml-auto flex items-center gap-1 border border-gray-200 rounded-lg p-1 bg-white">
-          <button onClick={() => setVista('list')} className={`p-1.5 rounded-md transition-colors ${vista === 'list' ? 'bg-gray-100 text-gray-700' : 'text-gray-400 hover:text-gray-600'}`}><List size={16} /></button>
-          <button onClick={() => setVista('grid')} className={`p-1.5 rounded-md transition-colors ${vista === 'grid' ? 'bg-gray-100 text-gray-700' : 'text-gray-400 hover:text-gray-600'}`}><LayoutGrid size={16} /></button>
-        </div>
       </div>
 
       {/* Table */}
@@ -272,16 +268,6 @@ export default function ClientesPage() {
     <div className="flex-1 overflow-y-auto bg-gray-50">
       <div className="max-w-screen-2xl mx-auto px-8 py-7">
         {/* Page header */}
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Clientes</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Gestión y monitoreo de cartera</p>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 bg-white hover:bg-gray-50 transition-colors shadow-sm">
-            <Download size={15} />
-            Exportar
-          </button>
-        </div>
 
         {/* Tabs */}
         <div className="flex gap-0 border-b border-gray-200 mb-6">
@@ -289,7 +275,7 @@ export default function ClientesPage() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`px-5 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              className={`px-5 py-3 text-medium text-[25px] border-b-2 -mb-px transition-colors ${
                 tab === id
                   ? 'border-brand-red text-brand-red'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
