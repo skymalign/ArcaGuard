@@ -122,3 +122,8 @@ import charts from "./charts.json";
 ```
 
 Para regenerarlo tras cambios en el modelo: `python src/export_charts.py`.
+
+Para instalar dependencias de la API: 
+pip install -r api/requirements.txt 
+
+Ejemplos de valores del env se encuentran en .env.example 
