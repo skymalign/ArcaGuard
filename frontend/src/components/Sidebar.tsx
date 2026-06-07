@@ -93,10 +93,7 @@ export default function Sidebar({ active, onSelect }: SidebarProps) {
             <span className="text-[10px] text-white/40 font-normal">submission .csv · 199,923</span>
           </span>
         </a>
-        <div className="px-3 pt-3 text-[11px] text-white/40">
-          Última actualización:<br />
-          <span className="text-white/60">29 May 2025 10:30 AM</span>
-        </div>
+        
       </div>
     </aside>
   );
