@@ -9,6 +9,10 @@ para que el equipo comercial actúe de forma proactiva.
 
 ---
 
+## Demo en vivo
+
+🔗 **Dashboard desplegado:** http://207.148.13.198/
+
 ## 🎯 Resultados clave
 
 | Métrica | Valor |
