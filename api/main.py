@@ -117,7 +117,7 @@ def build_prompt(customer: CustomerRiskRequest) -> str:
     8. Responde en español.
     9. Devuelve únicamente un JSON válido, sin markdown.
 
-    Formato exacto de respuesta:
+    Formato exacto de respuesta, con un máximo de tres estrategias sugeridas: 
     {{
     "diagnostico": "Resumen breve del nivel de riesgo del cliente.",
     "score_interpretacion": "Explicación breve de lo que significa el score de churn.",

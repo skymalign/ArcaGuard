@@ -22,6 +22,12 @@ const TITLES: Record<string, { title: string; subtitle: string }> = {
 export default function App() {
   const [activeNav, setActiveNav] = useState('dashboard');
   const { title, subtitle } = TITLES[activeNav] ?? TITLES.dashboard;
+  const [selectedClienteId, setSelectedClienteId] = useState<string | undefined>(); // To show AI recs
+
+  const openPlanIA = (clienteId: string) => {
+    setSelectedClienteId(clienteId);
+    setActiveNav('acciones-ia');
+  };
 
   return (
     <div className="flex h-screen overflow-hidden font-sans bg-gray-50">
@@ -29,11 +35,20 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0">
         {!FULLSCREEN.includes(activeNav) && <Topbar title={title} subtitle={subtitle} />}
         {activeNav === 'dashboard' && <DashboardPage />}
-        {activeNav === 'clientes' && <ClientesPage />}
+        {activeNav === 'clientes' && (
+          <ClientesPage onPlanIA={openPlanIA} />
+        )}
         {activeNav === 'segmentacion' && <SegmentacionPage />}
         {activeNav === 'territorios' && <TerritoriosPage />}
         {activeNav === 'tendencias' && <TendenciasPage />}
-        {activeNav === 'acciones-ia' && <AccionesIaPage onBack={() => setActiveNav('clientes')} />}
+
+        {/* To show ai for specific person */}
+        {activeNav === 'acciones-ia' && (
+          <AccionesIaPage
+            clienteId={selectedClienteId}
+            onBack={() => setActiveNav('clientes')}
+          />
+        )}
         {activeNav === 'centro-voz' && <CentroVozPage onBack={() => setActiveNav('clientes')} />}
       </div>
     </div>
