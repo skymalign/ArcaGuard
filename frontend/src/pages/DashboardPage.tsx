@@ -3,23 +3,24 @@ import RiskDistributionChart from '../components/RiskDistributionChart';
 import TerritoryChart from '../components/TerritoryChart';
 import TrendChart from '../components/TrendChart';
 import RiskFactors from '../components/RiskFactors';
+import { KPIS } from '../data/modelData';
 
 const KPI_DATA = [
   {
     title: 'Clientes Evaluados',
-    value: '199,923',
+    value: KPIS.clientesEvaluados.toLocaleString('es-MX'),
     subtitle: '100% del universo',
     variant: 'default' as const,
   },
   {
     title: 'Clientes en Alto Riesgo',
-    value: '10,276',
-    subtitle: '5.1% del total',
+    value: KPIS.clientesRiesgoAlto.toLocaleString('es-MX'),
+    subtitle: `${((KPIS.clientesRiesgoAlto / KPIS.clientesEvaluados) * 100).toFixed(1)}% del total`,
     variant: 'warning' as const,
   },
   {
     title: 'Recall@10%',
-    value: '87%',
+    value: `${Math.round(KPIS.recallTop10 * 100)}%`,
     subtitle: 'Captura de churn potencial',
     variant: 'success' as const,
   },

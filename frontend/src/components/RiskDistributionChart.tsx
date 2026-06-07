@@ -1,6 +1,8 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { NIVELES_RIESGO as RISK_DISTRIBUTION } from '../data/modelData';
 
+const TOTAL_CLIENTES = RISK_DISTRIBUTION.reduce((sum, item) => sum + item.value, 0);
+
 export default function RiskDistributionChart() {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
@@ -33,7 +35,7 @@ export default function RiskDistributionChart() {
           </ResponsiveContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-lg font-bold text-gray-900">199,923</span>
+            <span className="text-lg font-bold text-gray-900">{TOTAL_CLIENTES.toLocaleString()}</span>
             <span className="text-xs text-gray-400">Clientes</span>
           </div>
         </div>

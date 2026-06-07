@@ -1,10 +1,18 @@
 import { useState, useMemo } from 'react';
 import { Search, Download, List, LayoutGrid, ChevronDown, Phone } from 'lucide-react';
 import { CLIENTES, type Cliente, type RiskLevel } from '../data/clientesData';
-import { territorioChurn, churnColor } from '../data/modelData';
+import { territorioChurn, churnColor, NIVELES_RIESGO } from '../data/modelData';
 
 // Totales reales del scoring (scoring_clientes.csv) — universo completo.
-const TOTAL_REAL = { alto: 10276, medio: 20361, bajo: 169286, total: 199923 };
+const TOTAL_REAL = NIVELES_RIESGO.reduce(
+  (acc, item) => {
+    const key = item.name.split(' ')[0].toLowerCase() as 'alto' | 'medio' | 'bajo';
+    acc[key] = item.value;
+    acc.total += item.value;
+    return acc;
+  },
+  { alto: 0, medio: 0, bajo: 0, total: 0 },
+);
 
 // Celda con el churn real del territorio del cliente (reemplaza a 'Revenue',
 // que no existe en los datos del modelo).

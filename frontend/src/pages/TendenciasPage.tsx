@@ -1,14 +1,15 @@
 import { Download, FileText } from 'lucide-react';
 import { CLIENTES } from '../data/clientesData';
-import { territorioChurn, churnColor } from '../data/modelData';
+import { KPIS, RECALL_TOPK, territorioChurn, churnColor } from '../data/modelData';
 
 // ── Datos ──────────────────────────────────────────────────────────────────────
-// KPIs reales del modelo / negocio (reports/charts.json).
-const KPIS = [
-  { label: 'Clientes en Alto Riesgo',   value: '10,276' },
-  { label: 'Recall @ Top 10%',          value: '87%',    sub: 'lift 8.7×' },
-  { label: 'Revenue en Riesgo / mes',   value: '$12.0M' },
-  { label: 'Direccionable (Top 10%)',   value: '$10.5M' },
+const top10Lift = RECALL_TOPK.find((row) => row.k === '10%')?.lift ?? 8.7;
+
+const KPI_CARDS = [
+  { label: 'Clientes en Alto Riesgo', value: KPIS.clientesRiesgoAlto.toLocaleString('es-MX'), sub: `${((KPIS.clientesRiesgoAlto / KPIS.clientesEvaluados) * 100).toFixed(1)}% del total` },
+  { label: 'Recall @ Top 10%', value: `${Math.round(KPIS.recallTop10 * 100)}%`, sub: `lift ${top10Lift}×` },
+  { label: 'Revenue en Riesgo / mes', value: `$${(KPIS.mxnPerdidosMes / 1_000_000).toFixed(1)}M` },
+  { label: 'Direccionable (Top 10%)', value: `$${(KPIS.mxnDireccionableTop10 / 1_000_000).toFixed(1)}M` },
 ];
 
 // Lista priorizada derivada de los clientes en seguimiento (top por score).
@@ -25,10 +26,10 @@ const REPORTES_SEMANALES = [
 ];
 
 const IMPACTO = [
-  { label: 'Clientes en alto riesgo', value: '10,276', highlight: false },
-  { label: 'Revenue direccionable',   value: '$10.5M', highlight: true },
-  { label: 'Recall @ Top 10%',        value: '87%',    highlight: true },
-  { label: 'Lift vs. azar',           value: '8.7×',   highlight: false },
+  { label: 'Clientes en alto riesgo', value: KPIS.clientesRiesgoAlto.toLocaleString('es-MX'), highlight: false },
+  { label: 'Revenue en riesgo / mes', value: `$${(KPIS.mxnPerdidosMes / 1_000_000).toFixed(1)}M`, highlight: true },
+  { label: 'Direccionable Top 10%',   value: `$${(KPIS.mxnDireccionableTop10 / 1_000_000).toFixed(1)}M`, highlight: true },
+  { label: 'Recall @ Top 10%',        value: `${Math.round(KPIS.recallTop10 * 100)}%`, highlight: false },
 ];
 
 // ── Página ──────────────────────────────────────────────────────────────────────
@@ -51,7 +52,7 @@ export default function TendenciasPage() {
 
         {/* KPI row */}
         <div className="grid grid-cols-4 gap-5">
-          {KPIS.map((k) => (
+          {KPI_CARDS.map((k) => (
             <div key={k.label} className="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
               <p className="text-sm text-gray-500">{k.label}</p>
               <p className="text-3xl font-bold text-gray-900 mt-2">{k.value}</p>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
 import { Download, AlertTriangle, X, Building2, BarChart3, Users } from 'lucide-react';
-import { CHURN_TERRITORIO, churnNivel, churnColor } from '../data/modelData';
+import { CHURN_TERRITORIO, churnNivel, churnColor, KPIS } from '../data/modelData';
 import { CLIENTES } from '../data/clientesData';
 
 const MEX_TOPO = '/mexico-states.json';
@@ -31,7 +31,7 @@ const TERRITORIOS = CHURN_TERRITORIO.map((t, i) => ({
 type Terr = typeof TERRITORIOS[0];
 
 const MAX_CHURN = TERRITORIOS[0].churnPct;
-const PROMEDIO = 0.81; // churn rate global real
+const PROMEDIO = KPIS.churnRatePct; // churn rate global real desde modelData.ts
 
 const BADGE: Record<string, string> = {
   Alto:  'bg-red-100 text-brand-red',
