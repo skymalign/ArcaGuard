@@ -4,7 +4,6 @@ import {
   MapPin,
   TrendingUp,
   Users,
-  Sparkles,
   PhoneCall,
   Download,
 } from 'lucide-react';
