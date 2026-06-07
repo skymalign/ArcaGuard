@@ -39,16 +39,9 @@ export default function TendenciasPage() {
       <div className="max-w-screen-2xl mx-auto px-8 py-7 space-y-6">
 
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Reportes</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Seguimiento de acciones y resultados</p>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-brand-red hover:bg-brand-dark text-white rounded-lg text-sm font-semibold shadow-sm transition-colors">
-            <Download size={16} />
-            Generar Reporte
-          </button>
-        </div>
+        
+          
+        
 
         {/* KPI row */}
         <div className="grid grid-cols-4 gap-5">

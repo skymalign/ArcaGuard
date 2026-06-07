@@ -11,6 +11,7 @@
     "sync-submission": "node -e \"require('fs').copyFileSync('../data/processed/preds_submission.csv','public/preds_submission.csv'); console.log('preds_submission.csv -> public/ ok')\""
   },
   "dependencies": {
+    "@elevenlabs/react": "^1.6.4",
     "@tailwindcss/vite": "^4.3.0",
     "lucide-react": "^1.17.0",
     "prop-types": "^15.8.1",
