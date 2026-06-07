@@ -127,3 +127,14 @@ Para instalar dependencias de la API:
 pip install -r api/requirements.txt 
 
 Ejemplos de valores del env se encuentran en .env.example 
+
+## 🌍 Exponer IA públicamente (frontend + API)
+
+- API (`/api/main.py`) ahora usa variables de entorno para despliegue público:
+  - `FRONTEND_ORIGINS`: dominios permitidos por CORS, separados por coma.
+  - `API_SHARED_KEY`: llave opcional para proteger `/recommendation` mediante header `X-API-Key`.
+  - `RATE_LIMIT_PER_MINUTE`: límite básico por IP para `/recommendation`.
+  - `MAX_REQUEST_BYTES`: tamaño máximo de request para `/recommendation`.
+- Frontend (`/frontend`) requiere `VITE_API_URL` en producción para apuntar al backend público.
+- `VITE_API_CLIENT_KEY` es opcional y se envía como `X-API-Key` cuando está definido.
+- Mantén `GEMINI_API_KEY` únicamente en el servidor backend.

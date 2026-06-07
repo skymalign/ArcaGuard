@@ -1,10 +1,14 @@
 import os
 import json
-from typing import Optional, Any, Dict
+import logging
+import time
+from collections import defaultdict, deque
+from typing import Optional, Any, Dict, Deque, DefaultDict
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from google import genai
 
@@ -13,21 +17,80 @@ load_dotenv(".env") # At project root
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
-client = genai.Client(api_key=GEMINI_API_KEY)
+FRONTEND_ORIGINS = os.getenv(
+    "FRONTEND_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173",
+)
+API_SHARED_KEY = os.getenv("API_SHARED_KEY")
+RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
+MAX_REQUEST_BYTES = int(os.getenv("MAX_REQUEST_BYTES", "50000"))
+
+
+def parse_origins(origins: str) -> list[str]:
+    return [origin.strip() for origin in origins.split(",") if origin.strip()]
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 app = FastAPI(title="Churn Hunter AI API")
+allowed_origins = parse_origins(FRONTEND_ORIGINS)
 
-# Lets run in localhost, will probs change w deploy if done
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
-    allow_credentials=True,
+    allow_origins=allowed_origins,
+    allow_credentials="*" not in allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+request_history: DefaultDict[str, Deque[float]] = defaultdict(deque)
+
+
+def get_request_identifier(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.client and request.client.host:
+        return request.client.host
+    return "unknown"
+
+
+def validate_api_key(request: Request) -> None:
+    if not API_SHARED_KEY:
+        return
+    if request.headers.get("x-api-key") != API_SHARED_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid API key.",
+        )
+
+
+@app.middleware("http")
+async def protect_api(request: Request, call_next):
+    if request.url.path == "/recommendation":
+        requester = get_request_identifier(request)
+        now = time.time()
+        window = request_history[requester]
+        while window and now - window[0] > 60:
+            window.popleft()
+        if len(window) >= RATE_LIMIT_PER_MINUTE:
+            return JSONResponse(status_code=status.HTTP_429_TOO_MANY_REQUESTS, content={
+                "source": "service_protection",
+                "error": "Too many requests. Please retry shortly.",
+            })
+        window.append(now)
+
+        body = await request.body()
+        if len(body) > MAX_REQUEST_BYTES:
+            return JSONResponse(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                content={"source": "service_protection", "error": "Request body too large."},
+            )
+
+    return await call_next(request)
+
 
 # What the python will look like 
 class CustomerRiskRequest(BaseModel):
@@ -197,7 +260,7 @@ def fallback_recommendation(customer: CustomerRiskRequest) -> Dict[str, Any]:
 # Yeets it to the server 
 async def call_llm(customer: CustomerRiskRequest) -> Dict[str, Any]:
     # No es gemini, truena todo 
-    if not GEMINI_API_KEY:
+    if not GEMINI_API_KEY or client is None:
         raise RuntimeError("Missing GEMINI_API_KEY in .env")
 
     prompt = build_prompt(customer)  
@@ -235,7 +298,9 @@ def health_check():
     }
 
 @app.post("/recommendation")
-async def recommendation(customer: CustomerRiskRequest):
+async def recommendation(customer: CustomerRiskRequest, request: Request):
+    validate_api_key(request)
+
     try:
         recommendation_json = await call_llm(customer)
         return {
@@ -244,6 +309,7 @@ async def recommendation(customer: CustomerRiskRequest):
             "recommendation": recommendation_json,
         }
     except Exception as exc:
+        logger.exception("AI recommendation failed: %s", exc)
         fallback = fallback_recommendation(customer)
-        fallback["error"] = str(exc)
+        fallback["error"] = "AI service unavailable. Returned fallback recommendation."
         return fallback

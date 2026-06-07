@@ -80,7 +80,11 @@ export default function AccionesIaPage({ clienteId = "CLI-001", onBack }: Accion
       setSelected(0);
     } catch (err) {
       console.error(err);
-      setError("No se pudo generar la recomendación con IA. Intenta de nuevo.");
+      const message =
+        err instanceof Error
+          ? err.message
+          : "No se pudo generar la recomendación con IA. Intenta de nuevo.";
+      setError(message);
     } finally {
       setLoading(false);
     }

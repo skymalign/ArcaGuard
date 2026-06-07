@@ -30,6 +30,20 @@ interface ApiResponse {
   error?: string;
 }
 
+function resolveApiUrl() {
+  const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
+
+  if (configuredApiUrl) {
+    return configuredApiUrl.replace(/\/+$/, "");
+  }
+
+  if (import.meta.env.PROD) {
+    throw new Error("La app no tiene configurado VITE_API_URL en producción.");
+  }
+
+  return "http://localhost:8000";
+}
+
 // Ensure all are smaller letters 
 function normalizeRisk(riesgo: Cliente["riesgo"]) {
   if (riesgo === "Alto") return "alto";
@@ -47,7 +61,8 @@ export async function getAiRecommendation(
   cliente: Cliente,
   extra: { tamano: string; coolers: number }
 ): Promise<ApiResponse> {
-  const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+  const apiUrl = resolveApiUrl();
+  const apiClientKey = import.meta.env.VITE_API_CLIENT_KEY?.trim();
 
   const payload = {
     customer_id: cliente.hash,
@@ -85,12 +100,24 @@ export async function getAiRecommendation(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...(apiClientKey ? { "X-API-Key": apiClientKey } : {}),
     },
     body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
-    throw new Error("No se pudo generar el plan IA");
+    let message = `No se pudo generar el plan IA (${response.status}).`;
+
+    try {
+      const errorPayload = (await response.json()) as { error?: string };
+      if (errorPayload?.error) {
+        message = errorPayload.error;
+      }
+    } catch {
+      // Use default message if response is not JSON.
+    }
+
+    throw new Error(message);
   }
 
   return response.json();
