@@ -1,4 +1,3 @@
-import { Download, FileText } from 'lucide-react';
 import { CLIENTES } from '../data/clientesData';
 import { KPIS, RECALL_TOPK, territorioChurn, churnColor } from '../data/modelData';
 
@@ -19,18 +18,8 @@ const LISTA_PRIORIZADA = [...CLIENTES]
   .slice(0, 5)
   .map((c, i) => ({ rank: i + 1, cliente: c.nombre, hash: c.hash, score: c.score, territorio: c.territorio, accion: ACCIONES[i] ?? 'Seguimiento programado' }));
 
-const REPORTES_SEMANALES = [
-  { semana: 'Semana 23 (Jun 2026)', fecha: 'Generado 05 Jun 2026', estado: 'Generado' },
-  { semana: 'Semana 22 (Jun 2026)', fecha: 'Generado 29 May 2026', estado: 'Generado' },
-  { semana: 'Semana 21 (May 2026)', fecha: 'Generado 22 May 2026', estado: 'Generado' },
-];
-
-const IMPACTO = [
-  { label: 'Clientes en alto riesgo', value: KPIS.clientesRiesgoAlto.toLocaleString('es-MX'), highlight: false },
-  { label: 'Revenue en riesgo / mes', value: `$${(KPIS.mxnPerdidosMes / 1_000_000).toFixed(1)}M`, highlight: true },
-  { label: 'Direccionable Top 10%',   value: `$${(KPIS.mxnDireccionableTop10 / 1_000_000).toFixed(1)}M`, highlight: true },
-  { label: 'Recall @ Top 10%',        value: `${Math.round(KPIS.recallTop10 * 100)}%`, highlight: false },
-];
+const recall10 = RECALL_TOPK.find((row) => row.k === '10%') ?? RECALL_TOPK[0];
+const compareK = RECALL_TOPK.filter((row) => ['1%', '2%', '5%', '10%', '20%'].includes(row.k));
 
 // ── Página ──────────────────────────────────────────────────────────────────────
 export default function TendenciasPage() {
@@ -54,105 +43,86 @@ export default function TendenciasPage() {
           ))}
         </div>
 
-        {/* Lista Priorizada */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h3 className="text-base font-semibold text-gray-800">Lista Priorizada · Esta Semana</h3>
-            <button className="flex items-center gap-2 px-3.5 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
-              <Download size={14} />
-              Exportar
-            </button>
-          </div>
-
-          <table className="w-full">
-            <thead>
-              <tr className="text-left text-xs uppercase tracking-wider text-gray-400 border-b border-gray-100">
-                <th className="px-6 py-3 font-semibold">Cliente</th>
-                <th className="px-6 py-3 font-semibold">Score</th>
-                <th className="px-6 py-3 font-semibold">Territorio</th>
-                <th className="px-6 py-3 font-semibold">Acción</th>
-                <th className="px-6 py-3" />
-              </tr>
-            </thead>
-            <tbody>
-              {LISTA_PRIORIZADA.map((c) => (
-                <tr key={c.rank} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm text-gray-400 w-3">{c.rank}</span>
-                      <span className="group/cli relative">
-                        <span className="text-sm font-semibold text-gray-800">{c.cliente}</span>
-                        <span className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden group-hover/cli:block whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 shadow-lg">
-                          <span className="text-[10px] text-white/50">customer_id (hash): </span>
-                          <span className="text-[11px] font-mono text-white">{c.hash}</span>
-                        </span>
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-gray-900">{c.score}</span>
-                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-brand-red">Alto</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {c.territorio}
-                    {territorioChurn(c.territorio) != null && (
-                      <span className="ml-2 text-xs font-semibold" style={{ color: churnColor(territorioChurn(c.territorio)!) }}>
-                        {territorioChurn(c.territorio)}%
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{c.accion}</td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="px-4 py-1.5 bg-brand-red hover:bg-brand-dark text-white rounded-md text-sm font-semibold transition-colors">
-                      Ver Plan
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
         {/* Bottom row */}
-        <div className="grid grid-cols-2 gap-6">
-          {/* Reportes Semanales */}
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <FileText size={16} className="text-gray-400" />
-              <h3 className="text-base font-semibold text-gray-800">Reportes Semanales</h3>
+        <div className="grid grid-cols-3 gap-6">
+          <div className="col-span-2 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden h-fit">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h3 className="text-base font-semibold text-gray-800">Lista Priorizada · Esta Semana</h3>
             </div>
-            <div>
-              {REPORTES_SEMANALES.map((r) => (
-                <div key={r.semana} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800">{r.semana}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{r.fecha}</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                      {r.estado}
-                    </span>
-                    <button className="text-gray-400 hover:text-brand-red transition-colors">
-                      <Download size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+
+            <table className="w-full">
+              <thead>
+                <tr className="text-left text-xs uppercase tracking-wider text-gray-400 border-b border-gray-100">
+                  <th className="px-6 py-3 font-semibold">Cliente</th>
+                  <th className="px-6 py-3 font-semibold">Score</th>
+                  <th className="px-6 py-3 font-semibold">Territorio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {LISTA_PRIORIZADA.map((c) => (
+                  <tr key={c.rank} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-gray-400 w-3">{c.rank}</span>
+                        <span className="group/cli relative">
+                          <span className="text-sm font-semibold text-gray-800">{c.cliente}</span>
+                          <span className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden group-hover/cli:block whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 shadow-lg">
+                            <span className="text-[10px] text-white/50">customer_id (hash): </span>
+                            <span className="text-[11px] font-mono text-white">{c.hash}</span>
+                          </span>
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-gray-900">{c.score}</span>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-brand-red">Alto</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      {c.territorio}
+                      {territorioChurn(c.territorio) != null && (
+                        <span className="ml-2 text-xs font-semibold" style={{ color: churnColor(territorioChurn(c.territorio)!) }}>
+                          {territorioChurn(c.territorio)}%
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          {/* Impacto de Acciones */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-            <h3 className="text-base font-semibold text-gray-800 mb-4">Impacto de Acciones</h3>
-            <div>
-              {IMPACTO.map((m) => (
-                <div key={m.label} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
-                  <span className="text-sm text-gray-600">{m.label}</span>
-                  <span className={`text-xl font-bold ${m.highlight ? 'text-green-600' : 'text-gray-900'}`}>
-                    {m.value}
-                  </span>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-semibold text-gray-800">Comparativa de K</h3>
+                <p className="text-sm text-gray-500">Recalls y lift para K=1%, 2%, 5%, 10%, 20%.</p>
+              </div>
+              <span className="inline-flex items-center rounded-full bg-brand-red/10 px-3 py-1 text-sm font-semibold text-brand-red">
+                {recall10.k}
+              </span>
+            </div>
+
+            <div className="rounded-xl bg-gray-50 p-4 mb-4">
+              <p className="text-sm text-gray-500">Top 10% seleccionado</p>
+              <p className="text-3xl font-bold text-gray-900">{recall10.recall}%</p>
+              <p className="text-sm text-gray-500 mt-1">Lift {recall10.lift.toFixed(2)}× · {recall10.contactados.toLocaleString('es-MX')} contactados</p>
+            </div>
+
+            <div className="grid gap-3">
+              {compareK.map((row) => (
+                <div key={row.k} className={`rounded-xl p-4 ${row.k === '10%' ? 'bg-brand-red/10 border border-brand-red' : 'bg-white border border-gray-200'}`}>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{row.k}</p>
+                      <p className="text-xs text-gray-500">Recall / Lift</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-gray-900">{row.recall}%</p>
+                      <p className="text-sm text-gray-500">{row.lift.toFixed(2)}×</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

@@ -161,22 +161,21 @@ export default function TerritoriosPage() {
   return (
     <div className="flex flex-col flex-1 overflow-hidden bg-gray-50">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-8 py-6">
-          <h2 className="text-2xl font-bold text-[#1F2937]">Mapa de Riesgo</h2>
-      </div>
+      
 
       {/* Content */}
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 overflow-y-auto px-8 py-1 space-y-6">
+        <div className="flex-1 overflow-y-auto px-8 py-1">
+          <h2 className="text-2xl font-bold text-[#C8102E] py-6">Mapa de Riesgo</h2>
 
           {/* Map card */}
           <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
-              <h3 className="text-sm font-semibold text-gray-700">Tasa de Churn por Territorio (25)</h3>
+              <h3 className="text-sm font-semibold text-gray-700 text-[18px]">Tasa de Churn por Territorio (25)</h3>
               <div className="flex items-center gap-5 text-xs text-gray-600">
-                <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-brand-red inline-block" />Alto (≥1.0%)</span>
-                <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />Medio (0.7–1.0%)</span>
-                <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-green-400 inline-block" />Bajo (&lt;0.7%)</span>
+                <span className="flex items-center gap-1.5 text-[15px]"><span className="w-3 h-3 rounded-full bg-brand-red inline-block" />Alto (≥1.0%)</span>
+                <span className="flex items-center gap-1.5 text-[15px]"><span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />Medio (0.7–1.0%)</span>
+                <span className="flex items-center gap-1.5 text-[15px]"><span className="w-3 h-3 rounded-full bg-green-400 inline-block" />Bajo (&lt;0.7%)</span>
               </div>
             </div>
 
@@ -236,7 +235,7 @@ export default function TerritoriosPage() {
 
           {/* Grid de territorios */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-3">Todos los Territorios (ordenados por churn)</h3>
+            <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-3 mt-10 text-[15px]">Todos los Territorios (ordenados por churn)</h3>
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {TERRITORIOS.map((t) => (
                 <TerritoryCard key={t.id} t={t} selected={selected === t.id} onClick={() => handlePin(t.id)} />
@@ -253,8 +252,8 @@ export default function TerritoriosPage() {
             <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
               <AlertTriangle size={24} className="text-gray-400" />
             </div>
-            <p className="text-sm font-semibold text-gray-500">Selecciona un territorio</p>
-            <p className="text-xs text-gray-400 mt-1">Haz clic en un punto del mapa o en una tarjeta para ver el detalle</p>
+            <p className="text-sm font-semibold text-gray-500 text-[15px]">Selecciona un territorio</p>
+            <p className="text-xs text-gray-400 mt-1 text-[14px]">Haz clic en un punto del mapa o en una tarjeta para ver el detalle</p>
           </div>
         )}
       </div>
