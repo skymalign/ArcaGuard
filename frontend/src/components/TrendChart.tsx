@@ -12,12 +12,13 @@ import { CHURN_MES } from '../data/modelData';
 
 export default function TrendChart() {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm h-full flex flex-col">
       <h3 className="text-base font-semibold text-gray-800 mb-1">
         Tendencia de Tasa de Churn
       </h3>
       <p className="text-xs text-gray-400 mb-3">Mensual · histórico observado</p>
-      <ResponsiveContainer width="100%" height={200}>
+      <div className="flex-1 min-h-0">
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart data={CHURN_MES} margin={{ top: 4, right: 10, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
           <XAxis
@@ -56,6 +57,7 @@ export default function TrendChart() {
           />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }

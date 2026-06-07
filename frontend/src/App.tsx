@@ -9,19 +9,25 @@ import TendenciasPage from './pages/TendenciasPage';
 import AccionesIaPage from './pages/AccionesIaPage';
 import CentroVozPage from './pages/CentroVozPage';
 
-const FULLSCREEN = ['tendencias', 'acciones-ia', 'centro-voz'];
+const FULLSCREEN = ['acciones-ia', 'centro-voz'];
 
-const TITLES: Record<string, { title: string; subtitle: string }> = {
-  dashboard:    { title: 'Dashboard',    subtitle: 'Monitoreo de Riesgo de Churn' },
-  segmentacion: { title: 'Segmentación', subtitle: 'Análisis detallado del modelo predictivo' },
-  territorios:  { title: 'Territorios',  subtitle: 'Distribución territorial del riesgo' },
-  tendencias:   { title: 'Tendencias',   subtitle: 'Evolución del riesgo en el tiempo' },
-  clientes:     { title: 'Clientes',     subtitle: 'Gestión y monitoreo de cartera' },
+const TITLES: Record<string, { title: string }> = {
+  dashboard:    { title: 'Dashboard' },
+  segmentacion: { title: 'Segmentación' },
+  territorios:  { title: 'Territorios' },
+  tendencias:   { title: 'Tendencias' },
+  clientes:     { title: 'Clientes' },
 };
 
 export default function App() {
   const [activeNav, setActiveNav] = useState('dashboard');
   const { title, subtitle } = TITLES[activeNav] ?? TITLES.dashboard;
+  const [selectedClienteId, setSelectedClienteId] = useState<string | undefined>(); // To show AI recs
+
+  const openPlanIA = (clienteId: string) => {
+    setSelectedClienteId(clienteId);
+    setActiveNav('acciones-ia');
+  };
 
   return (
     <div className="flex h-screen overflow-hidden font-sans bg-gray-50">
@@ -29,11 +35,20 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0">
         {!FULLSCREEN.includes(activeNav) && <Topbar title={title} subtitle={subtitle} />}
         {activeNav === 'dashboard' && <DashboardPage />}
-        {activeNav === 'clientes' && <ClientesPage />}
+        {activeNav === 'clientes' && (
+          <ClientesPage onPlanIA={openPlanIA} />
+        )}
         {activeNav === 'segmentacion' && <SegmentacionPage />}
         {activeNav === 'territorios' && <TerritoriosPage />}
         {activeNav === 'tendencias' && <TendenciasPage />}
-        {activeNav === 'acciones-ia' && <AccionesIaPage onBack={() => setActiveNav('clientes')} />}
+
+        {/* To show ai for specific person */}
+        {activeNav === 'acciones-ia' && (
+          <AccionesIaPage
+            clienteId={selectedClienteId}
+            onBack={() => setActiveNav('clientes')}
+          />
+        )}
         {activeNav === 'centro-voz' && <CentroVozPage onBack={() => setActiveNav('clientes')} />}
       </div>
     </div>

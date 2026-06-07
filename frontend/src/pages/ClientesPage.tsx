@@ -25,14 +25,14 @@ function ChurnTerritorioCell({ territorio }: { territorio: string }) {
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 const RISK_BADGE: Record<RiskLevel, string> = {
-  Alto:  'bg-red-100 text-brand-red border border-red-200',
+  Alto: 'bg-red-100 text-brand-red border border-red-200',
   Medio: 'bg-amber-100 text-amber-700 border border-amber-200',
-  Bajo:  'bg-green-100 text-green-700 border border-green-200',
+  Bajo: 'bg-green-100 text-green-700 border border-green-200',
 };
 
 const TERRITORIOS = ['Todos los territorios', ...Array.from(new Set(CLIENTES.map(c => c.territorio))).sort()];
-const RIESGOS     = ['Todos los riesgos', 'Alto', 'Medio', 'Bajo'];
-const SUBCANALES  = ['Todos los subcanales', 'Coca-Cola', 'Monster Energy', 'Powerade', 'Jugos Del Valle', 'Agua Ciel', 'Café del Pacífico'];
+const RIESGOS = ['Todos los riesgos', 'Alto', 'Medio', 'Bajo'];
+const SUBCANALES = ['Todos los subcanales', 'Coca-Cola', 'Monster Energy', 'Powerade', 'Jugos Del Valle', 'Agua Ciel', 'Café del Pacífico'];
 
 function Select({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   return (
@@ -51,19 +51,19 @@ function Select({ value, onChange, options }: { value: string; onChange: (v: str
 
 // ── Riesgo de Churn tab ───────────────────────────────────────────────────────
 
-function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
-  const [buscar, setBuscar]     = useState('');
-  const [riesgo, setRiesgo]     = useState('Todos los riesgos');
-  const [territorio, setTerr]   = useState('Todos los territorios');
-  const [subcanal, setSub]      = useState('Todos los subcanales');
-  const [vista, setVista]       = useState<'list' | 'grid'>('list');
+function TabRiesgo({ clientes, onPlanIA }: { clientes: Cliente[]; onPlanIA?: (clienteId: string) => void; }) {
+  const [buscar, setBuscar] = useState('');
+  const [riesgo, setRiesgo] = useState('Todos los riesgos');
+  const [territorio, setTerr] = useState('Todos los territorios');
+  const [subcanal, setSub] = useState('Todos los subcanales');
+  const [vista, setVista] = useState<'list' | 'grid'>('list');
 
   const filtered = useMemo(() => {
     return clientes.filter(c => {
-      const matchBuscar    = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
-      const matchRiesgo    = riesgo === 'Todos los riesgos' || c.riesgo === riesgo;
+      const matchBuscar = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
+      const matchRiesgo = riesgo === 'Todos los riesgos' || c.riesgo === riesgo;
       const matchTerritorio = territorio === 'Todos los territorios' || c.territorio === territorio;
-      const matchSubcanal  = subcanal === 'Todos los subcanales' || c.subcanalMarca === subcanal;
+      const matchSubcanal = subcanal === 'Todos los subcanales' || c.subcanalMarca === subcanal;
       return matchBuscar && matchRiesgo && matchTerritorio && matchSubcanal;
     });
   }, [clientes, buscar, riesgo, territorio, subcanal]);
@@ -72,14 +72,14 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
     <div className="space-y-4">
       {/* Summary pills — totales reales del scoring (199,923 clientes) */}
       <div className="flex items-center gap-4 text-sm flex-wrap">
-        <span className="text-gray-500">Alto Riesgo: <span className="font-semibold text-brand-red">{TOTAL_REAL.alto.toLocaleString()}</span></span>
+        <span className="text-gray-500 text-[18px]">Alto Riesgo: <span className="font-semibold text-brand-red">{TOTAL_REAL.alto.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Medio Riesgo: <span className="font-semibold text-amber-600">{TOTAL_REAL.medio.toLocaleString()}</span></span>
+        <span className="text-gray-500 text-[18px]">Medio Riesgo: <span className="font-semibold text-amber-600">{TOTAL_REAL.medio.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Bajo Riesgo: <span className="font-semibold text-green-600">{TOTAL_REAL.bajo.toLocaleString()}</span></span>
+        <span className="text-gray-500 text-[18px]">Bajo Riesgo: <span className="font-semibold text-green-600">{TOTAL_REAL.bajo.toLocaleString()}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="text-gray-500">Total: <span className="font-semibold text-gray-800">{TOTAL_REAL.total.toLocaleString()}</span></span>
-        <span className="ml-auto text-xs text-gray-400">Mostrando muestra de {clientes.length} clientes prioritarios</span>
+        <span className="text-gray-500 text-[18px]">Total: <span className="font-semibold text-gray-800">{TOTAL_REAL.total.toLocaleString()}</span></span>
+        
       </div>
 
       {/* Filters */}
@@ -97,10 +97,6 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
         <Select value={riesgo}     onChange={setRiesgo}     options={RIESGOS} />
         <Select value={territorio} onChange={setTerr}       options={TERRITORIOS} />
         <Select value={subcanal}   onChange={setSub}        options={SUBCANALES} />
-        <div className="ml-auto flex items-center gap-1 border border-gray-200 rounded-lg p-1 bg-white">
-          <button onClick={() => setVista('list')} className={`p-1.5 rounded-md transition-colors ${vista === 'list' ? 'bg-gray-100 text-gray-700' : 'text-gray-400 hover:text-gray-600'}`}><List size={16} /></button>
-          <button onClick={() => setVista('grid')} className={`p-1.5 rounded-md transition-colors ${vista === 'grid' ? 'bg-gray-100 text-gray-700' : 'text-gray-400 hover:text-gray-600'}`}><LayoutGrid size={16} /></button>
-        </div>
       </div>
 
       {/* Table */}
@@ -154,7 +150,11 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
                 <td className="px-4 py-4"><ChurnTerritorioCell territorio={c.territorio} /></td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap">
+                    {/* Redirect to acciones IA */}
+                    <button
+                      onClick={() => onPlanIA?.(c.id)}
+                      className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap"
+                    >
                       Plan IA
                     </button>
                     <button className="px-3 py-1.5 border border-gray-200 text-gray-600 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5">
@@ -174,14 +174,20 @@ function TabRiesgo({ clientes }: { clientes: Cliente[] }) {
 
 // ── Todos los Clientes tab ────────────────────────────────────────────────────
 
-function TabTodos({ clientes }: { clientes: Cliente[] }) {
-  const [buscar, setBuscar]   = useState('');
+function TabTodos({
+  clientes,
+  onPlanIA,
+}: {
+  clientes: Cliente[];
+  onPlanIA?: (clienteId: string) => void;
+}) {
+  const [buscar, setBuscar] = useState('');
   const [territorio, setTerr] = useState('Todos los territorios');
-  const [vista, setVista]     = useState<'list' | 'grid'>('list');
+  const [vista, setVista] = useState<'list' | 'grid'>('list');
 
   const filtered = useMemo(() => {
     return clientes.filter(c => {
-      const matchBuscar     = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
+      const matchBuscar = c.nombre.toLowerCase().includes(buscar.toLowerCase()) || c.id.toLowerCase().includes(buscar.toLowerCase());
       const matchTerritorio = territorio === 'Todos los territorios' || c.territorio === territorio;
       return matchBuscar && matchTerritorio;
     });
@@ -240,7 +246,10 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
                 <td className="px-4 py-4"><ChurnTerritorioCell territorio={c.territorio} /></td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap">
+                    <button
+                      onClick={() => onPlanIA?.(c.id)}
+                      className="px-3 py-1.5 bg-brand-red text-white text-xs font-semibold rounded-lg hover:bg-brand-dark transition-colors whitespace-nowrap"
+                    >
                       Plan IA
                     </button>
                     <button className="px-3 py-1.5 border border-gray-200 text-gray-600 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5">
@@ -261,8 +270,12 @@ function TabTodos({ clientes }: { clientes: Cliente[] }) {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 type Tab = 'riesgo' | 'todos';
+// Lets it redirect to client
+interface ClientesPageProps {
+  onPlanIA?: (clienteId: string) => void;
+}
 
-export default function ClientesPage() {
+export default function ClientesPage({ onPlanIA }: ClientesPageProps) {
   const [tab, setTab] = useState<Tab>('riesgo');
 
   // For demo: "Riesgo de Churn" tab only shows clients with risk score
@@ -272,16 +285,6 @@ export default function ClientesPage() {
     <div className="flex-1 overflow-y-auto bg-gray-50">
       <div className="max-w-screen-2xl mx-auto px-8 py-7">
         {/* Page header */}
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Clientes</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Gestión y monitoreo de cartera</p>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 bg-white hover:bg-gray-50 transition-colors shadow-sm">
-            <Download size={15} />
-            Exportar
-          </button>
-        </div>
 
         {/* Tabs */}
         <div className="flex gap-0 border-b border-gray-200 mb-6">
@@ -289,7 +292,7 @@ export default function ClientesPage() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`px-5 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              className={`px-5 py-3 text-medium text-[25px] border-b-2 -mb-px transition-colors ${
                 tab === id
                   ? 'border-brand-red text-brand-red'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -302,8 +305,8 @@ export default function ClientesPage() {
 
         {/* Tab content */}
         {tab === 'riesgo'
-          ? <TabRiesgo clientes={clientesChurn} />
-          : <TabTodos  clientes={CLIENTES} />
+          ? <TabRiesgo clientes={clientesChurn} onPlanIA={onPlanIA} />
+          : <TabTodos clientes={CLIENTES} onPlanIA={onPlanIA} />
         }
       </div>
     </div>

@@ -185,6 +185,53 @@ def main():
         [pred_proba >= best_thr, pred_proba >= best_thr / 2],
         ["alto", "medio"], default="bajo",
     )
+    
+    # Agregando análisis IA 
+    # Includes all columns w info that might impact it 
+    explain_cols = [
+        "customer_id",
+        "recency",
+        "tenure",
+        "tx_lag1",
+        "tx_lag2",
+        "tx_lag3",
+        "bx_lag1",
+        "bx_lag2",
+        "tx_mean_3",
+        "tx_mean_6",
+        "tx_mean_12",
+        "bx_mean_3",
+        "bx_mean_6",
+        "tx_ratio_1_3",
+        "bx_ratio_1_3",
+        "tx_drop_3",
+        "tx_slope_3",
+        "meses_activos_3",
+        "meses_activos_6",
+        "pct_ceros_3",
+        "pct_ceros_6",
+        "num_coolers_last",
+        "num_doors_last",
+        "coolers_drop_3",
+        "tiene_cooler",
+        "territory_d",
+        "comercial_subchannel_d",
+        "rtm_customer_size_d",
+    ]
+
+    # Links to the customer id 
+    scoring_enriched = pred_out.merge(
+        pred[explain_cols],
+        on="customer_id",
+        how="left"
+    )
+
+    # Sorts by churn
+    scoring_enriched.sort_values("churn_proba", ascending=False).to_csv(
+        PROC / "scoring_clientes_enriched.csv",
+        index=False
+    )
+    
     print("\nDistribucion niveles de riesgo (202602):")
     print(pred_out["nivel_riesgo"].value_counts().to_string())
     print(f"Clientes marcados churn (target=1): {pred_out['target'].sum():,}")

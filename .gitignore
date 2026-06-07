@@ -12,3 +12,6 @@ venv/
 # Modelos / artefactos
 *.pkl
 *.joblib
+
+# General
+.env
